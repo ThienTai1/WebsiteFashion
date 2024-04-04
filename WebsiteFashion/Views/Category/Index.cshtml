@@ -1,0 +1,22 @@
+﻿@model IEnumerable<WebsiteFashion.Models.Category>
+
+<h2>Category</h2>
+<a asp-action="Add">Add</a>
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="d-flex flex-row gap-lg-5">
+            <div>
+                <span>@item.Id</span>
+                <span>@item.Name</span>
+            </div>
+            <div >
+                <div class="pull-right flex-row">
+                    @Html.ActionLink("Update", "Update", new { id = item.Id }, new { @class = "pull-right" })
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-danger" })
+                    @Html.ActionLink("Read more...", "Display", new { id = item.Id }, new { @class = "btn btn-primary" })
+                </div>
+            </div>
+        </div>
+    }
+</div>
