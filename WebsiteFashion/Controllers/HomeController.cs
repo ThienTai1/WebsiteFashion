@@ -1,12 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using WebsiteFashion.Models;
+using WebsiteFashion.Repositories;
 
 namespace WebsiteFashion.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        /*private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger)
         {
@@ -31,6 +33,21 @@ namespace WebsiteFashion.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }*/
+
+        private readonly IProductRepository _productRepository;
+        
+        public HomeController(IProductRepository productRepository)
+        {
+            _productRepository = productRepository;
         }
+
+        // Hien thi danh sach
+        public async Task<IActionResult> Index()
+        {
+            var products = await _productRepository.GetAllAsync(); return View(products);
+        }
+
+
     }
 }
