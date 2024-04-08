@@ -14,5 +14,8 @@ namespace WebsiteFashion.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
         //public DbSet<TaiKhoan> TaiKhoan { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
+
     }
 }
