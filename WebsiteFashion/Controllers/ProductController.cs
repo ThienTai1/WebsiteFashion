@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 using WebsiteFashion.Models;
@@ -7,6 +8,7 @@ using WebsiteFashion.Repositories;
 
 namespace WebsiteFashion.Controllers
 {
+    [Authorize(Roles ="Admin")]
     public class ProductController : Controller
     {
         private readonly IProductRepository _productRepository;

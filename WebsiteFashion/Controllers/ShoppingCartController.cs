@@ -15,9 +15,7 @@ namespace WebsiteFashion.Controllers
         private readonly IProductRepository _productRepository;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
-        public ShoppingCartController(ApplicationDbContext context,
-UserManager<ApplicationUser> userManager, IProductRepository
-productRepository)
+        public ShoppingCartController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IProductRepository productRepository)
         {
             _productRepository = productRepository;
             _context = context;
@@ -48,6 +46,17 @@ productRepository)
             return View(cart);
         }
         // Các actions khác...
+        // Load Hinh
+        private async Task<string> SaveImage(IFormFile image)
+        {
+            var savePath = Path.Combine("wwwroot/images", image.FileName); // Thay đổi đường dẫn theo cấu hình của bạn
+            using (var fileStream = new FileStream(savePath, FileMode.Create))
+            {
+                await image.CopyToAsync(fileStream);
+            }
+            return "/images/" + image.FileName; // Trả về đường dẫn tương đối
+        }
+
         private async Task<Product> GetProductFromDatabase(int productId)
         {
             // Truy vấn cơ sở dữ liệu để lấy thông tin sản phẩm
@@ -136,8 +145,7 @@ productRepository)
         [HttpPost]
         public async Task<IActionResult> Checkout(Order order)
         {
-            var cart =
-            HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart");
+            var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart");
             if (cart == null || !cart.Items.Any())
             {
                 // Xử lý giỏ hàng trống...

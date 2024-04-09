@@ -12,7 +12,7 @@ using WebsiteFashion.Data;
 namespace WebsiteFashion.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240408073748_initialOrder")]
+    [Migration("20240409032259_initialOrder")]
     partial class initialOrder
     {
         /// <inheritdoc />
