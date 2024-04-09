@@ -8,7 +8,8 @@ using WebsiteFashion.Repositories;
 
 namespace WebsiteFashion.Controllers
 {
-    [Authorize(Roles ="Admin")]
+    [Authorize(Roles = "Admin, Employee")]
+
     public class ProductController : Controller
     {
         private readonly IProductRepository _productRepository;

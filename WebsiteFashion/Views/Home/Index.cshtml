@@ -5,7 +5,7 @@
     int numOfQuantity = 1;
 }
 
-@* <html>
+<html>
 <body>
     <main>
         <!-- Banner layout 1 Start-->
@@ -54,7 +54,7 @@
         <div class="p-5">
             <div class="pt-5">
                 <h1>Popular</h1>
-                <div class="d-flex flex-row gap-5">
+                @* <div class="d-flex flex-row gap-5">
                     <div class="d-flex flex-column justify-content-center align-content-between gap-2 border rounded p-3 ">
                         <img style="height:250px; width:200px" src="https://livedemo00.template-help.com/prestashop_54008/img/p/1/1-tm_home_default.jpg" />
                         <span class="fw-bold fs-5">Dugan Wool Blend Peacoat</span>
@@ -75,11 +75,45 @@
                         <span class="fw-bold fs-5">Dugan Wool Blend Peacoat</span>
                         <span class="text-info">$77.51</span>
                     </div>
-                </div>
+                </div> *@
+                <section class="py-2">
+                    <div class="container px-4 px-lg-5 mt-5">
+
+                        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-
+content-center">
+
+                            @foreach (var item in Model)
+                            {
+                                <div class="col mb-5">
+                                    <div class="card gap-3" style="width: 18rem">
+                                        <img src="@item.ImageUrl" class="card-img-top" alt="..."
+                                             style="height: 300px">
+                                        <div class="card-body">
+                                            <h5 class="card-title">
+                                                @Html.DisplayFor(modelItem =>
+                                                         item.Name)
+                                            </h5>
+                                            <div class="d-flex">
+                                                <span>Price: </span>
+                                                <p class="mx-3">@item.Price.ToString("#,##0") Vnđ</p>
+                                            </div>
+                                            <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-productId="@item.Id" asp-route-quantity="@numOfQuantity">
+                                                <button class="btn btn-outline-dark">
+
+                                                    <i class="bi-cart-fill me-1"></i> Add to Cart
+                                                </button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </section>
             </div>
             <div class ="pt-5">
                 <h1>New Arrivals</h1>
-                <div class="d-flex flex-row gap-5">
+                @* <div class="d-flex flex-row gap-5">
                     <div class="d-flex flex-column justify-content-center align-content-between gap-2 border rounded p-3 ">
                         <img style="height:250px; width:200px" src="https://livedemo00.template-help.com/prestashop_54008/img/p/1/1-tm_home_default.jpg" />
                         <span class="fw-bold fs-5">Dugan Wool Blend Peacoat</span>
@@ -100,11 +134,45 @@
                         <span class="fw-bold fs-5">Dugan Wool Blend Peacoat</span>
                         <span class="text-info">$77.51</span>
                     </div>
-                </div>
+                </div> *@
+                <section class="py-2">
+                    <div class="container px-4 px-lg-5 mt-5">
+
+                        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-
+content-center">
+
+                            @foreach (var item in Model)
+                            {
+                                <div class="col mb-5">
+                                    <div class="card gap-3" style="width: 18rem">
+                                        <img src="@item.ImageUrl" class="card-img-top" alt="..."
+                                             style="height: 300px">
+                                        <div class="card-body">
+                                            <h5 class="card-title">
+                                                @Html.DisplayFor(modelItem =>
+                                                         item.Name)
+                                            </h5>
+                                            <div class="d-flex">
+                                                <span>Price: </span>
+                                                <p class="mx-3">@item.Price.ToString("#,##0") Vnđ</p>
+                                            </div>
+                                            <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-productId="@item.Id" asp-route-quantity="@numOfQuantity">
+                                                <button class="btn btn-outline-dark">
+
+                                                    <i class="bi-cart-fill me-1"></i> Add to Cart
+                                                </button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </section>
             </div>
             <div class="pt-5">
                 <h1>Best Sellers</h1>
-                <div class="d-flex flex-row gap-5">
+                @* <div class="d-flex flex-row gap-5">
                     <div class="d-flex flex-column justify-content-center align-content-between gap-2 border rounded p-3 ">
                         <img style="height:250px; width:200px" src="https://livedemo00.template-help.com/prestashop_54008/img/p/1/1-tm_home_default.jpg" />
                         <span class="fw-bold fs-5">Dugan Wool Blend Peacoat</span>
@@ -125,11 +193,45 @@
                         <span class="fw-bold fs-5">Dugan Wool Blend Peacoat</span>
                         <span class="text-info">$77.51</span>
                     </div>
-                </div>
+                </div> *@
+                <section class="py-2">
+                    <div class="container px-4 px-lg-5 mt-5">
+
+                        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-
+content-center">
+
+                            @foreach (var item in Model)
+                            {
+                                <div class="col mb-5">
+                                    <div class="card gap-3" style="width: 18rem">
+                                        <img src="@item.ImageUrl" class="card-img-top" alt="..."
+                                             style="height: 300px">
+                                        <div class="card-body">
+                                            <h5 class="card-title">
+                                                @Html.DisplayFor(modelItem =>
+                                                         item.Name)
+                                            </h5>
+                                            <div class="d-flex">
+                                                <span>Price: </span>
+                                                <p class="mx-3">@item.Price.ToString("#,##0") Vnđ</p>
+                                            </div>
+                                            <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-productId="@item.Id" asp-route-quantity="@numOfQuantity">
+                                                <button class="btn btn-outline-dark">
+
+                                                    <i class="bi-cart-fill me-1"></i> Add to Cart
+                                                </button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </section>
             </div>
             <div class="pt-5">
                 <h1>Specials</h1>
-                <div class="d-flex flex-row gap-5">
+                @* <div class="d-flex flex-row gap-5">
                     <div class="d-flex flex-column justify-content-center align-content-between gap-2 border rounded p-3 ">
                         <img style="height:250px; width:200px" src="https://livedemo00.template-help.com/prestashop_54008/img/p/1/1-tm_home_default.jpg" />
                         <span class="fw-bold fs-5">Dugan Wool Blend Peacoat</span>
@@ -150,7 +252,41 @@
                         <span class="fw-bold fs-5">Dugan Wool Blend Peacoat</span>
                         <span class="text-info">$77.51</span>
                     </div>
-                </div>
+                </div> *@
+                <section class="py-2">
+                    <div class="container px-4 px-lg-5 mt-5">
+
+                        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-
+content-center">
+
+                            @foreach (var item in Model)
+                            {
+                                <div class="col mb-5">
+                                    <div class="card gap-3" style="width: 18rem">
+                                        <img src="@item.ImageUrl" class="card-img-top" alt="..."
+                                             style="height: 300px">
+                                        <div class="card-body">
+                                            <h5 class="card-title">
+                                                @Html.DisplayFor(modelItem =>
+                                                         item.Name)
+                                            </h5>
+                                            <div class="d-flex">
+                                                <span>Price: </span>
+                                                <p class="mx-3">@item.Price.ToString("#,##0") Vnđ</p>
+                                            </div>
+                                            <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-productId="@item.Id" asp-route-quantity="@numOfQuantity">
+                                                <button class="btn btn-outline-dark">
+
+                                                    <i class="bi-cart-fill me-1"></i> Add to Cart
+                                                </button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </section>
             </div>
         </div>
         <!-- Group Products End-->
@@ -190,9 +326,9 @@
         </div>
     </footer>
 </body>
-</html> *@
+</html>
 
-<section class="py-2">
+@* <section class="py-2">
     <div class="container px-4 px-lg-5 mt-5">
 
         <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-
@@ -225,4 +361,4 @@ content-center">
             }
         </div>
     </div>
-</section>
+</section> *@

@@ -36,6 +36,16 @@
                             <li class="nav-item">
                                 <a class="nav-link text-white" asp-area="" asp-controller="Category" asp-action="Index">Category</a>
                             </li>
+                        }@if (User.Identity.IsAuthenticated && User.IsInRole("Employee"))
+                        {
+                            @* Product *@
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-controller="Product" asp-action="Index">Product</a>
+                            </li>
+                            @* Category *@
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-controller="Category" asp-action="Index">Category</a>
+                            </li>
                         }
 
                         @* Contact *@

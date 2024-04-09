@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using WebsiteFashion.Models;
 using WebsiteFashion.Repositories;
 
-namespace WebsiteFashion.Areas.Admin.Controllers
+namespace WebsiteFashion.Areas.Employee.Controllers
 {
-    [Area("Admin")]
-    [Authorize(Roles = "Admin")]
+    [Area("Employee")]
+    [Authorize(Roles = "Employee")]
 
     public class ProductController : Controller
     {

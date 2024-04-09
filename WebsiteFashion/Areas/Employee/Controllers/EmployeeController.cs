@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 using WebsiteFashion.Models;
 
 
-namespace WebsiteFashion.Areas.Admin.Controllers
+namespace WebsiteFashion.Areas.Employee.Controllers
 {
-    [Area("Admin")]
-    [Authorize(Roles = SD.Role_Admin)]
-    public class AdminController : Controller
+    [Area("Employee")]
+    [Authorize(Roles = SD.Role_Employee)]
+    public class EmplotyeeController : Controller
     {
         public IActionResult Index()
         {

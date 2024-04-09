@@ -21,6 +21,7 @@ namespace WebsiteFashion.Controllers
             _context = context;
             _userManager = userManager;
         }
+
         public async Task<IActionResult> AddToCart(int productId, int quantity)
         {
             // Giả sử bạn có phương thức lấy thông tin sản phẩm từ productId
