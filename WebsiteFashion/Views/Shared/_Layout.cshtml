@@ -26,10 +26,18 @@
                         <li class="nav-item">
                             <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        @* Product *@
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Product" asp-action="Index">Shop</a>
-                        </li>
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                        {
+                            @* Product *@
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-controller="Product" asp-action="Index">Product</a>
+                            </li>
+                            @* Category *@
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-controller="Category" asp-action="Index">Category</a>
+                            </li>
+                        }
+
                         @* Contact *@
                         <li class="nav-item">
                             <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
