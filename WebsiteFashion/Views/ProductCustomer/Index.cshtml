@@ -2,8 +2,27 @@
 
 <div class="d-flex ">
 
+
     @* Categories *@
     <div class="">
+        @* Search *@
+@*         <div class="form-group form-inline">
+            <form asp-controller="ProductCustomer" asp-action="Search" >
+                <input type="search" name="query" value="" />
+                <button type="submit">Tim kiem</button>
+            </form>
+        </div> *@
+        <form method="post" action="@Url.Action("Search", "ProductCustomer", new { product = Model.Item1})">
+            <input type="search" id="quantityInput" />
+            <div class="d-flex flex-row gap-lg-5 pt-lg-5">
+                <button type="submit" class="btn btn-outline-dark">
+                    <i class="bi-cart-fill me-1"></i> Tim kiem
+                </button>
+                <a asp-action="Index">Cancel</a>
+            </div>
+        </form>
+
+
         <div class="mb-3">
             <h4>Categories</h4>
             <ul class="list-unstyled">
