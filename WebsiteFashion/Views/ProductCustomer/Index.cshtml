@@ -1,0 +1,62 @@
+﻿@model IEnumerable<WebsiteFashion.Models.Product>
+
+
+
+<div class="d-flex ">
+    <div class="">
+        <div class="mb-3">
+            <h4>Categories</h4>
+            <ul class="list-unstyled">
+                @foreach (var item in Model)
+                {
+                    <li>
+                        <div class="d-flex justify-content-between">
+                            <a class="text-decoration-none text-black" asp-controller="Product" asp-action="Index">
+                                @item.Name
+                            </a>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div>
+        <section class="py-2">
+            <div id="partialZone" class="container px-4 px-lg-5 mt-5">
+
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+
+                    @foreach (var item in Model)
+                    {
+
+                        <div class="col mb-5">
+                            <div class="card gap-3" style="width: 18rem">
+                                <a class="text-decoration-none text-black" asp-controller="ShoppingCart" asp-action="Display" asp-route-productId="@item.Id">
+                                    <img src="@item.ImageUrl" class="card-img-top" alt="..." style="height: 300px">
+                                </a>
+
+                                <div class="card-body">
+                                    <a class="text-decoration-none text-black" asp-controller="ShoppingCart" asp-action="Display" asp-route-productId="@item.Id">
+                                        <h5 class="card-title">
+                                            @Html.DisplayFor(modelItem => item.Name)
+                                        </h5>
+                                        <div class="d-flex">
+                                            <span>Price: </span>
+                                            <p class="mx-3">@item.Price.ToString("#,##0") Vnđ</p>
+                                        </div>
+                                    </a>
+                                    <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-productId="@item.Id" asp-route-quantity="1">
+                                        <button class="btn btn-outline-dark">
+
+                                            <i class="bi-cart-fill me-1"></i> Add to Cart
+                                        </button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </section>
+    </div>
+</div>

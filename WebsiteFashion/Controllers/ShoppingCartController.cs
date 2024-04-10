@@ -38,7 +38,8 @@ namespace WebsiteFashion.Controllers
             ShoppingCart();
             cart.AddItem(cartItem);
             HttpContext.Session.SetObjectAsJson("Cart", cart);
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("Index", "Home");
+            /*return PartialView("_Layout");*/
         }
         public IActionResult Index()
         {
@@ -137,6 +138,17 @@ namespace WebsiteFashion.Controllers
 
             // Trả về View với model là order đã tìm được
             return View(order);
+        }
+
+        //hiển thị thông tin sản phẩm
+        public async Task<IActionResult> Display(int productId)
+        {
+            var product = await GetProductFromDatabase(productId);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return View(product);
         }
 
         public IActionResult Checkout()
