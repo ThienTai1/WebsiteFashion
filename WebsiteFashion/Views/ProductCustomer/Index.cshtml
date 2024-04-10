@@ -1,13 +1,13 @@
-﻿@model IEnumerable<WebsiteFashion.Models.Product>
-
-
+﻿@model Tuple<IEnumerable<Product>, IEnumerable<Category>>
 
 <div class="d-flex ">
+
+    @* Categories *@
     <div class="">
         <div class="mb-3">
             <h4>Categories</h4>
             <ul class="list-unstyled">
-                @foreach (var item in Model)
+                @foreach (var item in Model.Item2)
                 {
                     <li>
                         <div class="d-flex justify-content-between">
@@ -20,13 +20,16 @@
             </ul>
         </div>
     </div>
+
     <div>
+
+    @* Products *@
         <section class="py-2">
             <div id="partialZone" class="container px-4 px-lg-5 mt-5">
 
                 <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
 
-                    @foreach (var item in Model)
+                    @foreach (var item in Model.Item1)
                     {
 
                         <div class="col mb-5">

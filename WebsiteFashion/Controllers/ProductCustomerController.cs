@@ -24,7 +24,9 @@ namespace WebsiteFashion.Controllers
         public async Task<IActionResult> Index()
         {
             var products = await _productRepository.GetAllAsync();
-            return View(products);
+            var categories = await _categoryRepository.GetAllAsync();
+
+            return View(new Tuple<IEnumerable<Product>, IEnumerable<Category>>(products, categories));
         }
         public async Task<IActionResult> AddAsync()
         {
