@@ -28,23 +28,27 @@
                         </li>
                         @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                         {
-                            @* Product *@
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Product" asp-action="Index">Product</a>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle mr-3 text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="margin-right: 20px;">
+                                    Manager
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li class="nav-item"><a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Product</a></li>
+                                    <li class="nav-item"><a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Index">Category</a></li>
+                                    <li class="nav-item"><a class="dropdown-item nav-link text-dark" asp-area="Admin" asp-controller="Employee" asp-action="Index">Employee</a></li>
+                                </ul>
                             </li>
-                            @* Category *@
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Category" asp-action="Index">Category</a>
-                            </li>
-                        }@if (User.Identity.IsAuthenticated && User.IsInRole("Employee"))
+                        }
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Employee"))
                         {
-                            @* Product *@
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Product" asp-action="Index">Product</a>
-                            </li>
-                            @* Category *@
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Category" asp-action="Index">Category</a>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle mr-3 text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="margin-right: 20px;">
+                                    Manager
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li class="nav-item"><a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Product</a></li>
+                                    <li class="nav-item"><a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Index">Category</a></li>
+                                </ul>
                             </li>
                         }
 
@@ -71,6 +75,14 @@
                     </form>
                     }
                     <partial name="_LoginPartial" />
+
+                    @* Search bar *@
+                    <form class="d-flex" asp-controller="Product" asp-action="Search" method="get" style="width: 400px;">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="searchString">
+                        <button class="btn btn-secondary" type="submit">
+                            <img src="https://cdn.icon-icons.com/icons2/2768/PNG/512/search_button_icon_176619.png" class="img-fluid rounded" alt="ICON" style="max-width: 30px; height: 30px;">
+                        </button>
+                    </form>
 
                 </div>
 
