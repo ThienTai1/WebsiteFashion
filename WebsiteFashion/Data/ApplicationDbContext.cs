@@ -15,6 +15,6 @@ namespace WebsiteFashion.Data
         public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
-
+        public DbSet<ApplicationUser> Employee { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using WebsiteFashion.Repositories;
 using Microsoft.AspNetCore.Identity;
 using WebsiteFashion.Models;
 using Microsoft.OpenApi.Models;
+using WebsiteFashion.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +37,7 @@ builder.Services.AddRazorPages()
 
 builder.Services.AddScoped<IProductRepository, EFProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, EFCategoryRepository>();
+builder.Services.AddScoped<IEmployeeRepository, EFEmployeeRepository>();
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>

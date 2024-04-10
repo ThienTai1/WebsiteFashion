@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 using WebsiteFashion.Models;
 using WebsiteFashion.Repositories;
+using WebsiteFashion.Data;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace WebsiteFashion.Controllers
@@ -12,13 +14,15 @@ namespace WebsiteFashion.Controllers
 
     public class ProductController : Controller
     {
+        private readonly ApplicationDbContext _context;
         private readonly IProductRepository _productRepository;
         private readonly ICategoryRepository _categoryRepository;
 
-        public ProductController(IProductRepository productRepository, ICategoryRepository categoryRepository)
+        public ProductController(IProductRepository productRepository, ICategoryRepository categoryRepository, ApplicationDbContext context)
         {
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
+            _context = context;
         }
 
 
@@ -32,6 +36,23 @@ namespace WebsiteFashion.Controllers
             var categories = await _categoryRepository.GetAllAsync();
             ViewBag.Categories = new SelectList(categories, "Id", "Name");
             return View();
+        }
+
+        public async Task<IActionResult> Search(string searchString)
+        {
+            var allProduct = from s in _context.Products
+                             select s;
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                string lowercaseSearchString = searchString.ToLower();
+                allProduct = allProduct.Where(s => s.Name.ToLower().Contains(lowercaseSearchString));
+            }
+
+            // Lấy ra một sản phẩm duy nhất hoặc có thể chỉ lấy một sản phẩm đầu tiên từ danh sách
+            var product = await allProduct.FirstOrDefaultAsync();
+
+            return View(product);
         }
 
         // Add product

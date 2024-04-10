@@ -38,6 +38,7 @@ namespace WebsiteFashion.Controllers
             ShoppingCart();
             cart.AddItem(cartItem);
             HttpContext.Session.SetObjectAsJson("Cart", cart);
+
             return RedirectToAction("Index", "Home");
             /*return PartialView("_Layout");*/
         }
