@@ -18,7 +18,7 @@ namespace WebsiteFashion.Controllers
         public IActionResult Index()
         {
             return View();
-        }
+        }*/
 
         public IActionResult Contact()
         {
@@ -28,7 +28,7 @@ namespace WebsiteFashion.Controllers
         {
             return View();
         }
-
+        /*
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
