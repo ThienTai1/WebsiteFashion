@@ -105,5 +105,24 @@ namespace WebsiteFashion.Controllers
             await _categoryRepository.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteAll()
+        {
+            var products = await _categoryRepository.GetAllAsync();
+            if (products == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                foreach (var product in products)
+                {
+                    await _categoryRepository.DeleteAsync(product.Id);
+                }
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

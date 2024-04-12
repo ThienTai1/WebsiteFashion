@@ -15,6 +15,7 @@ namespace WebsiteFashion.Controllers
         private readonly IProductRepository _productRepository;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+
         public ShoppingCartController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IProductRepository productRepository)
         {
             _productRepository = productRepository;
@@ -24,7 +25,6 @@ namespace WebsiteFashion.Controllers
 
         public async Task<IActionResult> AddToCart(int productId, int quantity)
         {
-
 
             // lấy thông tin sản phẩm từ productId
             var product = await GetProductFromDatabase(productId);
@@ -42,7 +42,7 @@ namespace WebsiteFashion.Controllers
             cart.AddItem(cartItem);
             HttpContext.Session.SetObjectAsJson("Cart", cart);
 
-            
+
 
             // kiểm tra Url trước kia
             string previousRoute = Request.Headers["Referer"].ToString();
@@ -72,10 +72,10 @@ namespace WebsiteFashion.Controllers
             var product = await _productRepository.GetByIdAsync(productId);
             return product;
         }
+
         public IActionResult RemoveFromCart(int productId)
         {
-            var cart =
-            HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart");
+            var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart");
             if (cart is not null)
             {
                 cart.RemoveItem(productId);
@@ -85,7 +85,18 @@ namespace WebsiteFashion.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        public IActionResult RemoveAllFromCart()
+        {
+            var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart");
+            // Clear the entire cart logic here (e.g., remove all items from the cart)
+            if (cart is not null)
+            {
+                HttpContext.Session.Remove("Cart");
+            }
 
+            return RedirectToAction(nameof(Index));
+        }
         public IActionResult UpdateQuantity(int productId, int quantity)
         {
             // Kiểm tra nếu productId và quantity hợp lệ

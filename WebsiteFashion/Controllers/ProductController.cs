@@ -56,24 +56,6 @@ namespace WebsiteFashion.Controllers
             return View();
         }
         
-        // Search
-/*        public async Task<IActionResult> Search(string searchString)
-        {
-            var allProduct = from s in _context.Products select s;
-
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                string lowercaseSearchString = searchString.ToLower();
-                allProduct = allProduct.Where(s => s.Name.ToLower().Contains(lowercaseSearchString));
-            }
-
-            // Lấy ra một sản phẩm duy nhất hoặc có thể chỉ lấy một sản phẩm đầu tiên từ danh sách
-            var products = await allProduct.ToListAsync();
-
-            return View(products);
-        }
-*/
-
         // Add product
         [Authorize(Roles = "Admin, Employee")]
         [HttpPost]
@@ -182,6 +164,26 @@ namespace WebsiteFashion.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _productRepository.DeleteAsync(id);
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin, Employee")]
+        public async Task<IActionResult> DeleteAll()
+        {
+            var products = await _productRepository.GetAllAsync();
+            if (products == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                foreach (var product in products)
+                {
+                    await _productRepository.DeleteAsync(product.Id);
+                }
+            }
+
             return RedirectToAction(nameof(Index));
         }
     }

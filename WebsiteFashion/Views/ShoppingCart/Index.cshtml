@@ -2,9 +2,18 @@
 
 @{
     decimal sumTotal = 0;
+
 }
 
 <h2 class="my-4">Giỏ hàng của bạn</h2>
+
+
+<form method="post" asp-action="RemoveAllFromCart">
+    <button type="submit" class="btn btn-danger">
+        Xóa hết
+    </button>
+</form>
+
 <table class="table table-striped">
     <thead class="thead-dark">
         <tr>
@@ -20,9 +29,15 @@
         {
             <tr class="justify-content-between align-items-center">
                 <td>
-                    <img src="@item.ImageUrl" alt="@item.Name" style="width:100px;height:auto;">
+                    <a class="text-decoration-none text-black" asp-controller="Product" asp-action="Display" asp-route-productId="@item.ProductId">
+                        <img src="@item.ImageUrl" alt="@item.Name" style="width:100px;height:auto;">
+                    </a>
                 </td>
-                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>
+                    <a class="text-decoration-none text-black" asp-controller="Product" asp-action="Display" asp-route-productId="@item.ProductId">
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </a>
+                </td>
                 <td>
                     <form asp-controller="ShoppingCart" asp-action="UpdateQuantity" method="post">
                         <input type="hidden" name="productId" value="@item.ProductId" />
@@ -30,7 +45,6 @@
                         <button type="submit" class="btn btn-info btn-sm">Cập nhật</button>
                     </form>
                 </td>
-
                 <td>@Html.DisplayFor(modelItem => item.Price)</td>
                 <td>@(item.Price * item.Quantity)</td>
                 <td>
