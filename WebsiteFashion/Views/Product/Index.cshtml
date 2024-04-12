@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<WebsiteFashion.Models.Product>
 
 <h2>Products</h2>
-<a asp-action="Add">Add</a>
+<a asp-action="Add" class="btn btn-primary">Add New Product</a>
 
 <div class="row">
     @foreach (var item in Model)
@@ -9,7 +9,7 @@
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
             <div class="panel panel-default p-lg-3 border rounded ">
                 <div class="panel panel-heading">
-                    @Html.ActionLink("Update", "Update", new { id = item.Id }, new { @class = "pull-right" })
+                    @Html.ActionLink("Update", "Update", new { id = item.Id }, new { @class = "pull-right btn btn-primary" })
                 </div>
                 <div class="panel-body">
                     <p>
@@ -22,7 +22,14 @@
                 </div>
                 <div class="panel-footer clearfix">
                     <div class="pull-right flex-row">
-                        <a href="ShoppingCart" class="btn btn-primary">Order</a>
+                        <form method="post" action="@Url.Action("AddToCart", "ShoppingCart", new { productId = item.Id })">
+                            <input type="number" name="quantity" id="quantityInput" value="1" />
+                            <div class="d-flex flex-row gap-lg-2 pt-lg-2">
+                                <button type="submit" class="btn btn-outline-dark ">
+                                    <i class="bi-cart-fill me-1"></i> Add to cart
+                                </button>
+                            </div>
+                        </form>
                         @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-danger" })
                         @Html.ActionLink("Read more...", "Display", new { id = item.Id }, new { @class = "btn btn-primary" })
                     </div>

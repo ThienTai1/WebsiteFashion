@@ -36,6 +36,7 @@
                                     <li class="nav-item"><a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Product</a></li>
                                     <li class="nav-item"><a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Index">Category</a></li>
                                     <li class="nav-item"><a class="dropdown-item nav-link text-dark" asp-area="Admin" asp-controller="Employee" asp-action="Index">Employee</a></li>
+                                    <li class="nav-item"><a class="dropdown-item nav-link text-dark" asp-area="Admin" asp-controller="Customer" asp-action="Index">Customer</a></li>
                                 </ul>
                             </li>
                         }
@@ -48,12 +49,13 @@
                                 <ul class="dropdown-menu">
                                     <li class="nav-item"><a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Product</a></li>
                                     <li class="nav-item"><a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Index">Category</a></li>
+                                    <li class="nav-item"><a class="dropdown-item nav-link text-dark" asp-area="Employee" asp-controller="Customer" asp-action="Index">Customer</a></li>
                                 </ul>
                             </li>
                         }
 
                         @* Shop *@
-                        <li class="nav-item">
+                        <li class="nav-item">s
                             <a class="nav-link text-white" asp-area="" asp-controller="ProductCustomer" asp-action="Index">Shop</a>
                         </li>
                         @* Contact *@
@@ -66,8 +68,17 @@
                         </li>
                     </ul>
 
-                    @if (User.Identity.IsAuthenticated && !User.IsInRole("Employee")){
-                    <form class="d-flex" asp-controller="ShoppingCart" asp-action="Index">
+                    @* Search bar *@
+                    <form class="d-flex pe-5" asp-area=" , Identity" asp-controller="Product" asp-action="Index" method="get" style="width: 400px;">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="searchString">
+                        <button class="btn btn-outline-light" type="submit">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </form>
+
+                    @if (User.Identity.IsAuthenticated || !User.IsInRole("Admin") && !User.IsInRole("Employee"))
+                    {
+                        <form class="d-flex" asp-area=" , Identity" asp-controller="ShoppingCart" asp-action="Index">
                         <button class="btn btn-outline-light" type="submit">
                             <i class="bi-cart-fill me-1"></i>
                             Cart
@@ -75,14 +86,6 @@
                     </form>
                     }
                     <partial name="_LoginPartial" />
-
-                    @* Search bar *@
-                    <form class="d-flex" asp-controller="Product" asp-action="Search" method="get" style="width: 400px;">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="searchString">
-                        <button class="btn btn-secondary" type="submit">
-                            <img src="https://cdn.icon-icons.com/icons2/2768/PNG/512/search_button_icon_176619.png" class="img-fluid rounded" alt="ICON" style="max-width: 30px; height: 30px;">
-                        </button>
-                    </form>
 
                 </div>
 
