@@ -1,45 +1,122 @@
-﻿@model IEnumerable<WebsiteFashion.Models.Product>
+@model Tuple<IEnumerable<Product>, IEnumerable<Category>>
+@* Product role Admin & Employee *@
 
-<h2>Products</h2>
-<a asp-action="Add" class="btn btn-primary">Add New Product</a>
+@* Start (Admin & Employee)*@
+@if (User.Identity.IsAuthenticated && User.IsInRole("Employee") || User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
+  <h2>Products</h2>
+  <a asp-action="Add" class="btn btn-primary">Add New Product</a>
 
-<div class="row">
-    @foreach (var item in Model)
-    {
-        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-            <div class="panel panel-default p-lg-3 border rounded ">
-                <div class="panel panel-heading">
-                    @Html.ActionLink("Update", "Update", new { id = item.Id }, new { @class = "pull-right btn btn-primary" })
-                </div>
-                <div class="panel-body">
-                    <p>
-                        <img src="@item.ImageUrl" alt="Product Image" style="width: 300px; height: 400px;" />
-                    </p>
-                    @item.Name
-                    <p>
-                        <strong>@item.Price Đ</strong>
-                    </p>
-                </div>
-                <div class="panel-footer clearfix">
-                    <div class="pull-right flex-row">
-                        <form method="post" action="@Url.Action("AddToCart", "ShoppingCart", new { productId = item.Id })">
-                            <input type="number" name="quantity" id="quantityInput" value="1" />
-                            <div class="d-flex flex-row gap-lg-2 pt-lg-2">
-                                <button type="submit" class="btn btn-outline-dark ">
-                                    <i class="bi-cart-fill me-1"></i> Add to cart
-                                </button>
-                            </div>
-                        </form>
-                        @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-danger" })
-                        @Html.ActionLink("Read more...", "Display", new { id = item.Id }, new { @class = "btn btn-primary" })
+  <div class="row">
+      @foreach (var item in Model)
+      {
+          <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+              <div class="panel panel-default p-lg-3 border rounded ">
+                  <div class="panel panel-heading">
+                      @Html.ActionLink("Update", "Update", new { id = item.Id }, new { @class = "pull-right btn btn-primary" })
+                  </div>
+                  <div class="panel-body">
+                      <p>
+                          <img src="@item.ImageUrl" alt="Product Image" style="width: 300px; height: 400px;" />
+                      </p>
+                      @item.Name
+                      <p>
+                          <strong>@item.Price Đ</strong>
+                      </p>
+                  </div>
+                  <div class="panel-footer clearfix">
+                      <div class="pull-right flex-row">
+                          <form method="post" action="@Url.Action("AddToCart", "ShoppingCart", new { productId = item.Id })">
+                              <input type="number" name="quantity" id="quantityInput" value="1" />
+                              <div class="d-flex flex-row gap-lg-2 pt-lg-2">
+                                  <button type="submit" class="btn btn-outline-dark ">
+                                      <i class="bi-cart-fill me-1"></i> Add to cart
+                                  </button>
+                              </div>
+                          </form>
+                          @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-danger" })
+                          @Html.ActionLink("Read more...", "Display", new { id = item.Id }, new { @class = "btn btn-primary" })
                     </div>
-                @*@using (Html.BeginForm("Delete", "Books", new { id = item.Id }, FormMethod.Post, new { @class = "form-inline pull-right" }))
-                    {
-                        @Html.AntiForgeryToken()
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    } *@
                 </div>
             </div>
+        }
+    </div>
+}
+@* End (Admin & Employee)*@
+
+
+
+@* Product role Customer & Visitor *@
+
+else
+{
+    @* Start (Customer & Visitor)*@
+    <div class="d-flex ">
+
+        @* Start Categories *@
+
+        <div class="" style="weight:200px;">
+            <div class="mb-3">
+                <h4 class="text-black fw-bold" style="weight:300px;">Danh mục</h4>
+                <ul class="list-unstyled">
+                    @foreach (var item in Model.Item2)
+                    {
+                        <li>
+                            <div class="d-flex justify-content-between">
+                                <a class="text-decoration-none text-info" asp-controller="Product" asp-action="Index" asp-route-categoryName="@item.Name" method="get">
+                                    @item.Name
+                                </a>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </div>
         </div>
-    }
-</div>
+        @* End Categories *@
+
+
+        <div>
+            @* Start Products *@
+            <section class="py-2">
+                <div id="partialZone" class="container px-4 px-lg-5 mt-5">
+
+                    <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+
+                        @foreach (var item in Model.Item1)
+                        {
+
+                            <div class="col mb-5">
+                                <div class="card gap-3" style="width: 18rem">
+                                    <a class="text-decoration-none text-black" asp-controller="Product" asp-action="Display" asp-route-productId="@item.Id">
+                                        <img src="@item.ImageUrl" class="card-img-top" alt="..." style="height: 300px">
+                                    </a>
+
+                                    <div class="card-body">
+                                        <a class="text-decoration-none text-black" asp-controller="Product" asp-action="Display" asp-route-productId="@item.Id">
+                                            <h5 class="card-title">
+                                                @Html.DisplayFor(modelItem => item.Name)
+                                            </h5>
+                                            <div class="d-flex">
+                                                <span>Price: </span>
+                                                <p class="mx-3">@item.Price.ToString("#,##0") Vnđ</p>
+                                            </div>
+                                        </a>
+                                        <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-productId="@item.Id" asp-route-quantity="1">
+                                            <button class="btn btn-outline-dark">
+
+                                                <i class="bi-cart-fill me-1"></i> Add to Cart
+                                            </button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </section>
+            @* End Products *@
+
+        </div>
+    </div>
+@*End (Customer & Visitor)*@
+}

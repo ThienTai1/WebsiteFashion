@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace WebsiteFashion.Controllers
 {
-    [Authorize(Roles = "Admin, Employee")]
+    
 
     public class ProductController : Controller
     {
@@ -25,23 +25,41 @@ namespace WebsiteFashion.Controllers
             _context = context;
         }
 
-
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? searchString, string? categoryName)
         {
-            var products = await _productRepository.GetAllAsync();
-            return View(products);
+            var allProduct = from p in _context.Products select p;
+            var allCategory = from c in _context.Categories select c;
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                string lowercaseSearchString = searchString.ToLower();
+                allProduct = allProduct.Where(p => p.Name.ToLower().Contains(lowercaseSearchString));
+            }
+
+            if (!string.IsNullOrEmpty(categoryName))
+            {
+                allProduct = allProduct.Where(p => p.Category.Name.ToLower() == categoryName.ToLower());
+            }
+
+            var products = await allProduct.ToListAsync();
+            var categories = await allCategory.ToListAsync();
+
+            return View(new Tuple<IEnumerable<Product>, IEnumerable<Category>>(products, categories));
         }
+
+
+        [Authorize(Roles = "Admin, Employee")]
         public async Task<IActionResult> AddAsync()
         {
             var categories = await _categoryRepository.GetAllAsync();
             ViewBag.Categories = new SelectList(categories, "Id", "Name");
             return View();
         }
-
-        public async Task<IActionResult> Search(string searchString)
+        
+        // Search
+/*        public async Task<IActionResult> Search(string searchString)
         {
-            var allProduct = from s in _context.Products
-                             select s;
+            var allProduct = from s in _context.Products select s;
 
             if (!string.IsNullOrEmpty(searchString))
             {
@@ -50,12 +68,14 @@ namespace WebsiteFashion.Controllers
             }
 
             // Lấy ra một sản phẩm duy nhất hoặc có thể chỉ lấy một sản phẩm đầu tiên từ danh sách
-            var product = await allProduct.FirstOrDefaultAsync();
+            var products = await allProduct.ToListAsync();
 
-            return View(product);
+            return View(products);
         }
+*/
 
         // Add product
+        [Authorize(Roles = "Admin, Employee")]
         [HttpPost]
         public async Task<IActionResult> Add(Product product, IFormFile imageUrl, List<IFormFile> imageUrls)
         {
@@ -95,19 +115,28 @@ namespace WebsiteFashion.Controllers
             }
             return "/images/" + image.FileName; // Trả về đường dẫn tương đối
         }
-
+        private async Task<Product> GetProductFromDatabase(int productId)
+        {
+            // Truy vấn cơ sở dữ liệu để lấy thông tin sản phẩm
+            var product = await _productRepository.GetByIdAsync(productId);
+            return product;
+        }
 
         // Hiển thị thông tin chi tiết sản phẩm
-        public async Task<IActionResult> Display(int id)
+        public async Task<IActionResult> Display(int productId)
         {
-            var product = await _productRepository.GetByIdAsync(id);
+            var product = await GetProductFromDatabase(productId);
             if (product == null)
             {
                 return NotFound();
             }
             return View(product);
         }
+
+
+
         // Hiển thị form cập nhật sản phẩm
+        [Authorize(Roles = "Admin, Employee")]
         public async Task<IActionResult> Update(int id)
         {
             var product = await _productRepository.GetByIdAsync(id);
@@ -116,10 +145,7 @@ namespace WebsiteFashion.Controllers
                 return NotFound();
             }
             var categories = await _categoryRepository.GetAllAsync();
-            ViewBag.Categories = new SelectList(categories, "Id", "Name",
-
-            product.CategoryId);
-
+            ViewBag.Categories = new SelectList(categories, "Id", "Name", product.CategoryId);
             return View(product);
         }
 
@@ -137,7 +163,10 @@ namespace WebsiteFashion.Controllers
             }
             return View(product);
         }
+
+
         // Hiển thị form xác nhận xóa sản phẩm
+        [Authorize(Roles = "Admin, Employee")]
         public async Task<IActionResult> Delete(int id)
         {
             var product = await _productRepository.GetByIdAsync(id);
