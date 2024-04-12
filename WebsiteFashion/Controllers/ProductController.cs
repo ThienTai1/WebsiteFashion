@@ -176,6 +176,7 @@ namespace WebsiteFashion.Controllers
             }
             return View(product);
         }
+
         // Xử lý xóa sản phẩm
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
