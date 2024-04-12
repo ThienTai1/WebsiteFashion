@@ -81,7 +81,7 @@
                     </form>
 
                     @* Cart Button *@
-                    @if (User.Identity.IsAuthenticated || !User.IsInRole("Admin") && !User.IsInRole("Employee"))
+                    @if (!User.Identity.IsAuthenticated || (!User.IsInRole("Admin") && !User.IsInRole("Employee")))
                     {
                         <form class="d-flex" asp-area=" , Identity" asp-controller="ShoppingCart" asp-action="Index">
                             <button class="btn btn-outline-light" type="submit">
@@ -103,6 +103,8 @@
             @RenderBody()
         </main>
     </div>
+
+    <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top" style=""><i class="fa fa-arrow-up"></i></a>
 
     <footer class="border-top text-muted bg-black pt-4">
         <div class="container h-auto d-flex flex-row justify-content-center align-content-between gap-5">
@@ -137,6 +139,14 @@
             </div>
         </div>
     </footer>
+
+    @* Chat box *@
+    <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+    <df-messenger intent="Xin chào"
+                  chat-title="chatbot"
+                  agent-id="2a854f5d-fbc4-40dd-8517-8ae0a1474f92"
+                  language-code="vi"></df-messenger>
+    
     <div class="footer px-3">&copy;<span id="year"> </span><span> Fashion. All rights reserved.</span></div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
