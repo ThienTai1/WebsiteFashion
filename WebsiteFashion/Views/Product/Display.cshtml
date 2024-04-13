@@ -17,7 +17,7 @@
         {
             foreach (var imageUrl in Model.ImageUrls)
             {
-                <img src = "@imageUrl" alt = "Product Image" style = "width: 300px; height: auto;" />
+                <img src="@imageUrl" alt="Product Image" style="width: 300px; height: auto;" />
             }
         }
     </div>
@@ -26,33 +26,36 @@
 
 
 @* Role Customer & Visitor *@
-<div class="d-flex flex-row gap-lg-5">
-    <div>
-        <img src="@Model.ImageUrl" alt="Product Image" style="width: 500px; height: auto;" />
+else
+{
+    <div class="d-flex flex-row gap-lg-5 p-5">
+        <div class="pe-5">
+            <img class="rounded" src="@Model.ImageUrl" alt="Product Image" style="  min-height: 200px;max-height: 400px;width: auto;" />
+        </div>
+        <div class="justify-content-center align-item-between">
+            <h3>@Model.Name</h3>
+            <h4 class="text-info">@Model.Price</h4>
+
+            <form method="post" action="@Url.Action("AddToCart", "ShoppingCart", new { productId = Model.Id })">
+                <input type="number" name="quantity" id="quantityInput" value="1" />
+                <div class="d-flex flex-row gap-lg-5 pt-lg-5">
+                    <button type="submit" class="btn btn-outline-dark">
+                        <i class="bi-cart-fill me-1"></i> Add to Cart
+                    </button>
+                    <a asp-action="Index">Cancel</a>
+                </div>
+            </form>
+        </div>
     </div>
-    <div>
-        <h3>@Model.Name</h3>
-        <h4 class="text-info">@Model.Price</h4>
 
-        <form method="post" action="@Url.Action("AddToCart", "ShoppingCart", new { productId = Model.Id })">
-            <input type="number" name="quantity" id="quantityInput" value="1" />
-            <div class="d-flex flex-row gap-lg-5 pt-lg-5">
-                <button type="submit" class="btn btn-outline-dark">
-                    <i class="bi-cart-fill me-1"></i> Add to Cart
-                </button>
-                <a asp-action="Index">Cancel</a>
-            </div>
-        </form>
-    </div>
-</div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var quantityInput = document.getElementById("quantityInput");
+            var addToCartLink = document.querySelector("a[asp-action='AddToCart']");
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        var quantityInput = document.getElementById("quantityInput");
-        var addToCartLink = document.querySelector("a[asp-action='AddToCart']");
-
-        quantityInput.addEventListener("change", function () {
-            addToCartLink.href = addToCartLink.href.replace("asp-route-quantity=", "asp-route-quantity=" + this.value);
+            quantityInput.addEventListener("change", function () {
+                addToCartLink.href = addToCartLink.href.replace("asp-route-quantity=", "asp-route-quantity=" + this.value);
+            });
         });
-    });
-</script>
+    </script>
+}

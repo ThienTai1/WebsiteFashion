@@ -4,24 +4,36 @@
 @inject UserManager<ApplicationUser> UserManager
 
 <ul class="navbar-nav">
-@if (SignInManager.IsSignedIn(User))
-{
-    <li class="nav-item">
-        <a id="manage" class="nav-link text-white" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
-    </li>
-    <li class="nav-item">
-        <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button id="logout" type="submit" class="nav-link btn btn-link text-white border-0">Logout</button>
-        </form>
-    </li>
-}
-else
-{
-    <li class="nav-item">
-        <a class="nav-link text-white" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>
-    <li class="nav-item">
-            <a class="nav-link text-white" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </li>
-}
-</ul>
+
+    @if (SignInManager.IsSignedIn(User))
+    {
+
+        <li class="nav-item dropdown color-white" style="position: relative; left: 30px;">
+            <div class="d-flex align-items-center">
+                <a class="nav-link dropdown-toggle me-3" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="https://cdn.iconscout.com/icon/free/png-512/free-profile-3409120-2841252.png" class="img-rounded" alt="ICON" style="max-width: 30px; height: 30px;" />
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                        <a id="manage" class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Tài khoản</a>
+                    </li>
+                    <li>
+                        <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                            <button id="logout" type="submit" class="dropdown-item">Đăng xuất</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item" style="position: relative; left: 30px;">
+            <a class="" id="login" asp-area="Identity" asp-page="/Account/Login">
+                <img src="https://cdn.iconscout.com/icon/free/png-512/free-profile-3409120-2841252.png" class="img-rounded mx-auto d-block" alt="ICON" style="max-width: 30px; height: 30px;">
+            </a>
+        </li>
+
+    }
+</ul></ul>
+

@@ -28,13 +28,15 @@ namespace WebsiteFashion.Controllers
 
         public async Task<IActionResult> AddToCart(int productId, int quantity)
         {
-            // Giả sử bạn có phương thức lấy thông tin sản phẩm từ productId
+
+            // lấy thông tin sản phẩm từ productId
             var product = await GetProductFromDatabase(productId);
             var cartItem = new CartItem
             {
                 ProductId = productId,
                 Name = product.Name,
                 Price = product.Price,
+                ImageUrl = product.ImageUrl,
                 Quantity = quantity
             };
             var cart =
@@ -43,25 +45,28 @@ namespace WebsiteFashion.Controllers
             cart.AddItem(cartItem);
             HttpContext.Session.SetObjectAsJson("Cart", cart);
 
-            return RedirectToAction("Index", "Home");
-            /*return PartialView("_Layout");*/
+
+
+            // kiểm tra Url trước kia
+            string previousRoute = Request.Headers["Referer"].ToString();
+
+            // Quay về Url trước kia
+            if (!string.IsNullOrEmpty(previousRoute))
+            {
+                return Redirect(previousRoute);
+            }
+            else
+            {
+                // Ko thấy Url trước kia sẽ quay về Home.
+                return RedirectToAction("Index", "Home");
+            }
+
         }
         public IActionResult Index()
         {
             var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart") ?? new
             ShoppingCart();
             return View(cart);
-        }
-        // Các actions khác...
-        // Load Hinh
-        private async Task<string> SaveImage(IFormFile image)
-        {
-            var savePath = Path.Combine("wwwroot/images", image.FileName); // Thay đổi đường dẫn theo cấu hình của bạn
-            using (var fileStream = new FileStream(savePath, FileMode.Create))
-            {
-                await image.CopyToAsync(fileStream);
-            }
-            return "/images/" + image.FileName; // Trả về đường dẫn tương đối
         }
 
         private async Task<Product> GetProductFromDatabase(int productId)
@@ -70,10 +75,10 @@ namespace WebsiteFashion.Controllers
             var product = await _productRepository.GetByIdAsync(productId);
             return product;
         }
+
         public IActionResult RemoveFromCart(int productId)
         {
-            var cart =
-            HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart");
+            var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart");
             if (cart is not null)
             {
                 cart.RemoveItem(productId);
@@ -83,7 +88,18 @@ namespace WebsiteFashion.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        public IActionResult RemoveAllFromCart()
+        {
+            var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart");
+            // Clear the entire cart logic here (e.g., remove all items from the cart)
+            if (cart is not null)
+            {
+                HttpContext.Session.Remove("Cart");
+            }
 
+            return RedirectToAction(nameof(Index));
+        }
         public IActionResult UpdateQuantity(int productId, int quantity)
         {
             // Kiểm tra nếu productId và quantity hợp lệ
@@ -231,4 +247,4 @@ namespace WebsiteFashion.Controllers
             return RedirectToAction("PaymentSuccess");
         }
     }
-}   
+}

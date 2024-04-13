@@ -1,22 +1,46 @@
 ﻿@model IEnumerable<WebsiteFashion.Models.Category>
 
 <h2>Category</h2>
-<a asp-action="Add">Add</a>
-<div class="row">
-    @foreach (var item in Model)
-    {
-        <div class="d-flex flex-row gap-lg-5">
-            <div>
-                <span>@item.Id</span>
-                <span>@item.Name</span>
-            </div>
-            <div >
-                <div class="pull-right flex-row">
-                    @Html.ActionLink("Update", "Update", new { id = item.Id }, new { @class = "pull-right" })
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-danger" })
-                    @Html.ActionLink("Read more...", "Display", new { id = item.Id }, new { @class = "btn btn-primary" })
-                </div>
-            </div>
-        </div>
-    }
+<div class="d-flex flex-row gap-4">
+
+    <a asp-action="Add">
+        <button class="btn btn-primary">
+            Add
+        </button>
+    </a>
+    <form method="post" asp-action="DeleteAll">
+        <button type="submit" class="btn btn-danger">Delete All</button>
+    </form>
 </div>
+
+<table class="table table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="justify-content-between align-items-center">
+                <td>
+                    <span>@item.Id</span>
+                </td>
+                <td>
+                    <span>@item.Name</span>
+                </td>
+                <td>
+                    @Html.ActionLink("Update", "Update", new { id = item.Id }, new { @class = "btn btn-primary" })
+                </td>
+                <td>
+                    @Html.ActionLink("Read more...", "Display", new { id = item.Id }, new { @class = "btn btn-primary" })
+                </td>
+                <td>
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-danger" })
+                </td>
+            </tr>
+
+        }
+    </tbody>
+</table>

@@ -15,26 +15,27 @@
                 <div class="col-md-5 p-lg-5 mx-auto my-5 text-white">
                     <h1 class="display-4 fw-normal">Punny headline</h1>
                     <p class="lead fw-normal">And an even wittier subheading to boot. Jumpstart your marketing efforts with this example based on Apple’s marketing pages.</p>
-                    <a class="btn btn-outline-dark fw-bold" asp-controller="Product" asp-action="Index" >Mua ngay</a>
+                    <a class="btn btn-outline-dark fw-bold" asp-controller="Product" asp-action="Index" >Buy Now</a>
                 </div>
             </div>
         </div>
         <!-- Banner layout End-->
+
         <!-- Products Start-->
-        <div class="d-flex flex-row align-content-between justify-content-between p-5">
-            <div class="d-flex flex-column justify-content-between align-content-center text-center gap-2" >
+        <div class=" row row-cols-1 row-cols-md-3 align-content-between justify-content-between pb-5">
+            <div class="d-flex flex-column justify-content-center align-items-center text-center gap-4 pt-5">
                 <h3 class="">Top</h3>
-                <img src="https://i.pinimg.com/236x/76/66/c4/7666c4dc655f0e7622a13163158faea0.jpg" style="width:300px;height:400px" alt="Top" />
+                <img src="https://i.pinimg.com/236x/76/66/c4/7666c4dc655f0e7622a13163158faea0.jpg" style="max-width:300px;min-width:200px;min-height: 200px;max-height: 400px;" alt="Top" />
                 <a class="btn btn-outline-dark fw-bold" asp-controller="Product" asp-action="Index" asp-route-categoryName="Ao">Xem them</a>
             </div>
-            <div class="d-flex flex-column justify-content-center align-content-center text-center gap-2">
+            <div class="d-flex flex-column justify-content-center align-items-center text-center gap-2 pt-5">
                 <h3 class="">Bottom</h3>
-                <img src="https://i.pinimg.com/236x/da/ed/4c/daed4cc312f34383a0cadf51a0f9d733.jpg" style="width:300px;height:400px" alt="Bottom" />
+                <img src="https://i.pinimg.com/236x/da/ed/4c/daed4cc312f34383a0cadf51a0f9d733.jpg" style="max-width:300px;min-width:200px;min-height: 200px;max-height: 400px;" alt="Bottom" />
                 <a class="btn btn-outline-dark fw-bold" asp-controller="Product" asp-action="Index" asp-route-categoryName="Quan">Xem them</a>
             </div>
-            <div class="d-flex flex-column justify-content-center align-content-center text-center gap-2">
+            <div class="d-flex flex-column justify-content-center align-items-center text-center gap-2 pt-5">
                 <h3 class="">Bag</h3>
-                <img src="https://i.pinimg.com/564x/9e/d7/60/9ed760efb0f5a8a5b4d1b591c5a935c1.jpg" style="width:300px;height:400px" alt="Bag" />
+                <img src="https://i.pinimg.com/564x/9e/d7/60/9ed760efb0f5a8a5b4d1b591c5a935c1.jpg" style="max-width:300px;min-width:200px;min-height: 200px;max-height: 400px;" alt="Bag" />
                 <a class="btn btn-outline-dark fw-bold" asp-controller="Product" asp-action="Index" asp-route-categoryName="balo">Xem them</a>
             </div>
         </div>
@@ -49,50 +50,27 @@
         </div>
         <!-- Banner layout 2 End-->
         <!-- Group Products Start-->
-        <div class="p-5">
+        <div class="p-2">
             <div class="pt-5">
-                <h1>Popular</h1>
-                @* <div class="d-flex flex-row gap-5">
-                <div class="d-flex flex-column justify-content-center align-content-between gap-2 border rounded p-3 ">
-                <img style="height:250px; width:200px" src="https://livedemo00.template-help.com/prestashop_54008/img/p/1/1-tm_home_default.jpg" />
-                <span class="fw-bold fs-5">Dugan Wool Blend Peacoat</span>
-                <span class="text-info">$77.51</span>
-                </div>
-                <div class="d-flex flex-column justify-content-center align-content-between gap-2 border rounded p-3 ">
-                <img style="height:250px; width:200px" src="https://livedemo00.template-help.com/prestashop_54008/img/p/1/1-tm_home_default.jpg" />
-                <span class="fw-bold fs-5">Dugan Wool Blend Peacoat</span>
-                <span class="text-info">$77.51</span>
-                </div>
-                <div class="d-flex flex-column justify-content-center align-content-between gap-2 border rounded p-3 ">
-                <img style="height:250px; width:200px" src="https://livedemo00.template-help.com/prestashop_54008/img/p/1/1-tm_home_default.jpg" />
-                <span class="fw-bold fs-5">Dugan Wool Blend Peacoat</span>
-                <span class="text-info">$77.51</span>
-                </div>
-                <div class="d-flex flex-column justify-content-center align-content-between gap-2 border rounded p-3 ">
-                <img style="height:250px; width:200px" src="https://livedemo00.template-help.com/prestashop_54008/img/p/1/1-tm_home_default.jpg" />
-                <span class="fw-bold fs-5">Dugan Wool Blend Peacoat</span>
-                <span class="text-info">$77.51</span>
-                </div>
-                </div> *@
+                <h1>Reference</h1>
                 <section class="py-2">
-                    <div class="container px-4 px-lg-5 mt-5">
+                    <div class="container px-1 mt-5">
 
-                        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-
-content-center">
+                        <div class="row gx-4 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
 
                             @foreach (var item in Model)
                             {
-                                @if (count < 4)
+                                @if (count < 8)
                                 {
 
                                     <div class="col mb-5">
-                                        <div class="card gap-3" style="width: 18rem">
-                                            <a class="text-decoration-none text-black" asp-controller="ShoppingCart" asp-action="Display" asp-route-productId="@item.Id">
-                                                <img src="@item.ImageUrl" class="card-img-top" alt="..." style="height: 300px">
+                                        <div class="card gap-3" style="width: 16rem; max-height:500px;">
+                                            <a class="text-decoration-none text-black" asp-controller="Product" asp-action="Display" asp-route-productId="@item.Id">
+                                                <img src="@item.ImageUrl" class="card-img-top" alt="..." style="max-height: 280px;">
                                             </a>
 
                                             <div class="card-body">
-                                                <a class="text-decoration-none text-black" asp-controller="ShoppingCart" asp-action="Display" asp-route-productId="@item.Id">
+                                                <a class="text-decoration-none text-black" asp-controller="Product" asp-action="Display" asp-route-productId="@item.Id">
                                                     <h5 class="card-title">
                                                         @Html.DisplayFor(modelItem => item.Name)
                                                     </h5>
@@ -122,221 +100,6 @@ content-center">
                     </div>
                 </section>
             </div>
-            <div class="pt-5">
-                <h1>New Arrivals</h1>
-                @* <div class="d-flex flex-row gap-5">
-                <div class="d-flex flex-column justify-content-center align-content-between gap-2 border rounded p-3 ">
-                <img style="height:250px; width:200px" src="https://livedemo00.template-help.com/prestashop_54008/img/p/1/1-tm_home_default.jpg" />
-                <span class="fw-bold fs-5">Dugan Wool Blend Peacoat</span>
-                <span class="text-info">$77.51</span>
-                </div>
-                <div class="d-flex flex-column justify-content-center align-content-between gap-2 border rounded p-3 ">
-                <img style="height:250px; width:200px" src="https://livedemo00.template-help.com/prestashop_54008/img/p/1/1-tm_home_default.jpg" />
-                <span class="fw-bold fs-5">Dugan Wool Blend Peacoat</span>
-                <span class="text-info">$77.51</span>
-                </div>
-                <div class="d-flex flex-column justify-content-center align-content-between gap-2 border rounded p-3 ">
-                <img style="height:250px; width:200px" src="https://livedemo00.template-help.com/prestashop_54008/img/p/1/1-tm_home_default.jpg" />
-                <span class="fw-bold fs-5">Dugan Wool Blend Peacoat</span>
-                <span class="text-info">$77.51</span>
-                </div>
-                <div class="d-flex flex-column justify-content-center align-content-between gap-2 border rounded p-3 ">
-                <img style="height:250px; width:200px" src="https://livedemo00.template-help.com/prestashop_54008/img/p/1/1-tm_home_default.jpg" />
-                <span class="fw-bold fs-5">Dugan Wool Blend Peacoat</span>
-                <span class="text-info">$77.51</span>
-                </div>
-                </div> *@
-                <section class="py-2">
-                    <div class="container px-4 px-lg-5 mt-5">
-
-                        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-
-content-center">
-
-                            @foreach (var item1 in Model)
-                            {
-                                @if (item1.CategoryId==0 & count < 4)
-                                {
-
-                                    <div class="col mb-5">
-                                        <div class="card gap-3" style="width: 18rem">
-                                            <a class="text-decoration-none text-black" asp-controller="ShoppingCart" asp-action="Display" asp-route-productId="@item1.Id">
-                                                <img src="@item1.ImageUrl" class="card-img-top" alt="..." style="height: 300px">
-                                            </a>
-
-                                            <div class="card-body">
-                                                <a class="text-decoration-none text-black" asp-controller="ShoppingCart" asp-action="Display" asp-route-productId="@item1.Id">
-                                                    <h5 class="card-title">
-                                                        @Html.DisplayFor(modelItem => item1.Name)
-                                                    </h5>
-                                                    <div class="d-flex">
-                                                        <span>Price: </span>
-                                                        <p class="mx-3">@item1.Price.ToString("#,##0") Vnđ</p>
-                                                    </div>
-                                                </a>
-                                                <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-productId="@item1.Id" asp-route-quantity="@numOfQuantity">
-                                                    <button class="btn btn-outline-dark">
-
-                                                        <i class="bi-cart-fill me-1"></i> Add to Cart
-                                                    </button>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-                                else
-                                {
-                                    count++;
-                                    break;
-                                }
-                                
-                            }
-                        </div>
-                    </div>
-                </section>
-            </div>
-            <div class="pt-5">
-                <h1>Best Sellers</h1>
-                @* <div class="d-flex flex-row gap-5">
-                <div class="d-flex flex-column justify-content-center align-content-between gap-2 border rounded p-3 ">
-                <img style="height:250px; width:200px" src="https://livedemo00.template-help.com/prestashop_54008/img/p/1/1-tm_home_default.jpg" />
-                <span class="fw-bold fs-5">Dugan Wool Blend Peacoat</span>
-                <span class="text-info">$77.51</span>
-                </div>
-                <div class="d-flex flex-column justify-content-center align-content-between gap-2 border rounded p-3 ">
-                <img style="height:250px; width:200px" src="https://livedemo00.template-help.com/prestashop_54008/img/p/1/1-tm_home_default.jpg" />
-                <span class="fw-bold fs-5">Dugan Wool Blend Peacoat</span>
-                <span class="text-info">$77.51</span>
-                </div>
-                <div class="d-flex flex-column justify-content-center align-content-between gap-2 border rounded p-3 ">
-                <img style="height:250px; width:200px" src="https://livedemo00.template-help.com/prestashop_54008/img/p/1/1-tm_home_default.jpg" />
-                <span class="fw-bold fs-5">Dugan Wool Blend Peacoat</span>
-                <span class="text-info">$77.51</span>
-                </div>
-                <div class="d-flex flex-column justify-content-center align-content-between gap-2 border rounded p-3 ">
-                <img style="height:250px; width:200px" src="https://livedemo00.template-help.com/prestashop_54008/img/p/1/1-tm_home_default.jpg" />
-                <span class="fw-bold fs-5">Dugan Wool Blend Peacoat</span>
-                <span class="text-info">$77.51</span>
-                </div>
-                </div> *@
-                <section class="py-2">
-                    <div class="container px-4 px-lg-5 mt-5">
-
-                        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-
-content-center">
-
-                            @foreach (var item in Model)
-                            {
-                                @if (count < 4)
-                                {
-
-                                    <div class="col mb-5">
-                                        <div class="card gap-3" style="width: 18rem">
-                                            <a class="text-decoration-none text-black" asp-controller="ShoppingCart" asp-action="Display" asp-route-productId="@item.Id">
-                                                <img src="@item.ImageUrl" class="card-img-top" alt="..." style="height: 300px">
-                                            </a>
-
-                                            <div class="card-body">
-                                                <a class="text-decoration-none text-black" asp-controller="ShoppingCart" asp-action="Display" asp-route-productId="@item.Id">
-                                                    <h5 class="card-title">
-                                                        @Html.DisplayFor(modelItem => item.Name)
-                                                    </h5>
-                                                    <div class="d-flex">
-                                                        <span>Price: </span>
-                                                        <p class="mx-3">@item.Price.ToString("#,##0") Vnđ</p>
-                                                    </div>
-                                                </a>
-                                                <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-productId="@item.Id" asp-route-quantity="@numOfQuantity">
-                                                    <button class="btn btn-outline-dark">
-
-                                                        <i class="bi-cart-fill me-1"></i> Add to Cart
-                                                    </button>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-                                else
-                                {
-                                    break;
-                                }
-                                count++;
-                            }
-                        </div>
-                    </div>
-                </section>
-            </div>
-            <div class="pt-5">
-                <h1>Specials</h1>
-                @* <div class="d-flex flex-row gap-5">
-                <div class="d-flex flex-column justify-content-center align-content-between gap-2 border rounded p-3 ">
-                <img style="height:250px; width:200px" src="https://livedemo00.template-help.com/prestashop_54008/img/p/1/1-tm_home_default.jpg" />
-                <span class="fw-bold fs-5">Dugan Wool Blend Peacoat</span>
-                <span class="text-info">$77.51</span>
-                </div>
-                <div class="d-flex flex-column justify-content-center align-content-between gap-2 border rounded p-3 ">
-                <img style="height:250px; width:200px" src="https://livedemo00.template-help.com/prestashop_54008/img/p/1/1-tm_home_default.jpg" />
-                <span class="fw-bold fs-5">Dugan Wool Blend Peacoat</span>
-                <span class="text-info">$77.51</span>
-                </div>
-                <div class="d-flex flex-column justify-content-center align-content-between gap-2 border rounded p-3 ">
-                <img style="height:250px; width:200px" src="https://livedemo00.template-help.com/prestashop_54008/img/p/1/1-tm_home_default.jpg" />
-                <span class="fw-bold fs-5">Dugan Wool Blend Peacoat</span>
-                <span class="text-info">$77.51</span>
-                </div>
-                <div class="d-flex flex-column justify-content-center align-content-between gap-2 border rounded p-3 ">
-                <img style="height:250px; width:200px" src="https://livedemo00.template-help.com/prestashop_54008/img/p/1/1-tm_home_default.jpg" />
-                <span class="fw-bold fs-5">Dugan Wool Blend Peacoat</span>
-                <span class="text-info">$77.51</span>
-                </div>
-                </div> *@
-                <section class="py-2">
-                    <div class="container px-4 px-lg-5 mt-5">
-
-                        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-
-content-center">
-
-                            @foreach (var item in Model)
-                            {
-                                @if (count < 4)
-                                {
-
-                                    <div class="col mb-5">
-                                        <div class="card gap-3" style="width: 18rem">
-                                            <a class="text-decoration-none text-black" asp-controller="ShoppingCart" asp-action="Display" asp-route-productId="@item.Id">
-                                                <img src="@item.ImageUrl" class="card-img-top" alt="..." style="height: 300px">
-                                            </a>
-
-                                            <div class="card-body">
-                                                <a class="text-decoration-none text-black" asp-controller="ShoppingCart" asp-action="Display" asp-route-productId="@item.Id">
-                                                    <h5 class="card-title">
-                                                        @Html.DisplayFor(modelItem => item.Name)
-                                                    </h5>
-                                                    <div class="d-flex">
-                                                        <span>Price: </span>
-                                                        <p class="mx-3">@item.Price.ToString("#,##0") Vnđ</p>
-                                                    </div>
-                                                </a>
-                                                <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-productId="@item.Id" asp-route-quantity="@numOfQuantity">
-                                                    <button class="btn btn-outline-dark">
-
-                                                        <i class="bi-cart-fill me-1"></i> Add to Cart
-                                                    </button>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-                                else
-                                {
-                                    break;
-
-                                }
-                                count++;
-                            }
-                        </div>
-                    </div>
-                </section>
-            </div>
         </div>
         <!-- Group Products End-->
 
@@ -350,51 +113,3 @@ content-center">
         $.('#partialZone').load("Home")
     </script>
 } *@
-
-
-<section class="py-2">
-    <div id="partialZone" class="container px-4 px-lg-5 mt-5">
-
-        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-
-content-center">
-
-            @foreach (var item in Model)
-            {
-                @if (count < 4)
-                {
-
-                    <div class="col mb-5">
-                        <div class="card gap-3" style="width: 18rem">
-                            <a class="text-decoration-none text-black" asp-controller="ShoppingCart" asp-action="Display" asp-route-productId="@item.Id">
-                                <img src="@item.ImageUrl" class="card-img-top" alt="..." style="height: 300px">
-                            </a>
-
-                            <div class="card-body">
-                                <a class="text-decoration-none text-black" asp-controller="ShoppingCart" asp-action="Display" asp-route-productId="@item.Id">
-                                    <h5 class="card-title">
-                                        @Html.DisplayFor(modelItem => item.Name)
-                                    </h5>
-                                    <div class="d-flex">
-                                        <span>Price: </span>
-                                        <p class="mx-3">@item.Price.ToString("#,##0") Vnđ</p>
-                                    </div>
-                                </a>
-                                <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-productId="@item.Id" asp-route-quantity="@numOfQuantity">
-                                    <button class="btn btn-outline-dark">
-
-                                        <i class="bi-cart-fill me-1"></i> Add to Cart
-                                    </button>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                }
-                else
-                {
-                    break;
-                }
-                count++;
-            }
-        </div>
-    </div>
-</section>
