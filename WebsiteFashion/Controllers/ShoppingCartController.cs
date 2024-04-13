@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Buoi03Lab03.Models;
+using ECommerceMVC.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,12 +17,13 @@ namespace WebsiteFashion.Controllers
         private readonly IProductRepository _productRepository;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
-
-        public ShoppingCartController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IProductRepository productRepository)
+        private readonly IVnPayService _vnPayservice;
+        public ShoppingCartController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IProductRepository productRepository, IVnPayService vnPayservice)
         {
             _productRepository = productRepository;
             _context = context;
             _userManager = userManager;
+            _vnPayservice = vnPayservice;
         }
 
         public async Task<IActionResult> AddToCart(int productId, int quantity)
@@ -174,7 +177,7 @@ namespace WebsiteFashion.Controllers
             return View(new Order());
         }
         [HttpPost]
-        public async Task<IActionResult> Checkout(Order order)
+        public async Task<IActionResult> Checkout(Order order, string payment)
         {
             var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart");
             if (cart == null || !cart.Items.Any())
@@ -194,8 +197,54 @@ namespace WebsiteFashion.Controllers
             }).ToList();
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
+            if (payment == "Thanh toán VNPay")
+            {
+                var vnPayModel = new VnPaymentRequest
+                {
+                    Amount = ((double)cart.Items.Sum(i => i.Price * i.Quantity)),
+                    CreatedDate = DateTime.Now,
+
+                    Description = user.FullName + user.PhoneNumber,
+                    FullName = user.FullName,
+                    OrderId = (int)order.Id
+
+
+                };
+                var ID = vnPayModel.OrderId;
+                return Redirect(_vnPayservice.CreatePaymentUrl(HttpContext, vnPayModel));
+            }
             HttpContext.Session.Remove("Cart");
             return View("OrderCompleted", order.Id); // Trang xác nhận hoàn thành đơn hàng
+        }
+        [Authorize]
+        public IActionResult PaymentSuccess()
+        {
+			HttpContext.Session.Remove("Cart");
+			return View();
+        }
+        [Authorize]
+        public IActionResult PaymentFail()
+        {
+            return View();
+        }
+        [Authorize]
+        public IActionResult PaymentCallBack()
+        {
+            var response = _vnPayservice.PaymentExecute(Request.Query);
+
+            if (response == null || response.VnPayResponseCode != "00")
+            {
+                TempData["Message"] = $"Lỗi thanh toán VN Pay: {response.VnPayResponseCode}";
+                return RedirectToAction("PaymentFail");
+            }
+
+
+            // Lưu đơn hàng vô database
+
+            TempData["Message"] = $"Thanh toán VNPay thành công";
+
+
+            return RedirectToAction("PaymentSuccess");
         }
     }
 }

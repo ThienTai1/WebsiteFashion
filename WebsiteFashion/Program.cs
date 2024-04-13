@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using WebsiteFashion.Models;
 using Microsoft.OpenApi.Models;
 using WebsiteFashion.Repositories;
+using ECommerceMVC.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,6 +47,8 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
+builder.Services.AddSingleton<IVnPayService, VnPayService>();
 
 builder.Services.AddControllersWithViews();
 
