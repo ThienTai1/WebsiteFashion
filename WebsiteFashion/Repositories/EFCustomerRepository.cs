@@ -22,8 +22,8 @@ namespace WebsiteFashion.Repositories
         public async Task<IEnumerable<ApplicationUser>> GetAllAsync()
         {
             // Query the list of users with the "Customer" role
-            var employees = await _userManager.GetUsersInRoleAsync("Customer");
-            return employees;
+            var customer = await _userManager.GetUsersInRoleAsync("Customer");
+            return customer;
         }
 
         public async Task<ApplicationUser> GetByIdAsync(string userId)

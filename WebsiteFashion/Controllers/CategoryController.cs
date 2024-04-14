@@ -12,10 +12,13 @@ namespace WebsiteFashion.Controllers
     public class CategoryController : Controller
     {
         private readonly ICategoryRepository _categoryRepository;
+        private readonly ICouponRepository _couponRepository;
 
-        public CategoryController(ICategoryRepository categoryRepository)
+
+        public CategoryController(ICategoryRepository categoryRepository, ICouponRepository couponRepository)
         {
             _categoryRepository = categoryRepository;
+            _couponRepository = couponRepository;
         }
 
 
@@ -32,17 +35,44 @@ namespace WebsiteFashion.Controllers
         }
 
         // Add category
+        /*        [HttpPost]
+                public async Task<IActionResult> Add(Category category)
+                {
+                    if (ModelState.IsValid)
+                    {
+                        await _categoryRepository.AddAsync(category);
+                        return RedirectToAction(nameof(Index));
+                    }
+                    // Nếu ModelState không hợp lệ, hiển thị form với dữ liệu đã nhập
+                    var categories = await _categoryRepository.GetAllAsync();
+                    ViewBag.Categories = new SelectList(categories, "Id", "Name");
+                    return View(category);
+                }*/
+
         [HttpPost]
-        public async Task<IActionResult> Add(Category category)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Add(Category category, int? couponId)
         {
             if (ModelState.IsValid)
             {
+                if (couponId.HasValue)
+                {
+                    var coupon = await _couponRepository.GetByIdAsync(couponId.Value);
+                    if (coupon != null)
+                    {
+                        category.Coupon = coupon;
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("CouponId", "Invalid coupon selected.");
+                        return View(category);
+                    }
+                }
+
                 await _categoryRepository.AddAsync(category);
                 return RedirectToAction(nameof(Index));
             }
-            // Nếu ModelState không hợp lệ, hiển thị form với dữ liệu đã nhập
-            var categories = await _categoryRepository.GetAllAsync();
-            ViewBag.Categories = new SelectList(categories, "Id", "Name");
+
             return View(category);
         }
 

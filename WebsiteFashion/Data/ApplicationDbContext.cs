@@ -16,5 +16,6 @@ namespace WebsiteFashion.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<ApplicationUser> Employee { get; set; }
+        public DbSet<Coupon> Coupon { get; set;}
     }
 }

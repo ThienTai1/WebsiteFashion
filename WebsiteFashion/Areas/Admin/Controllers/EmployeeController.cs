@@ -94,5 +94,43 @@ namespace WebsiteFashion.Areas.Admin.Controllers
             await _employeeRepository.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpPost]
+        public async Task<IActionResult> LockAccount(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            // Khóa tài khoản
+            var result = await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.MaxValue);
+            if (result.Succeeded)
+            {
+                TempData["Message"] = "Khoá Tài Khoản Thành Công";
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View("Error"); // Hoặc xử lý lỗi phù hợp
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UnlockAccount(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            // Mở khóa tài khoản
+            var result = await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.UtcNow);
+            if (result.Succeeded)
+            {
+                TempData["Message"] = "Mở Khoá Tài Khoản Thành Công";
+                return RedirectToAction(nameof(Index));
+            }
+            return View("Error"); // Hoặc xử lý lỗi phù hợp
+        }
     }
 }
