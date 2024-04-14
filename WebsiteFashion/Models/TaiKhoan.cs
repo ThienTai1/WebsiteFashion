@@ -11,5 +11,7 @@ namespace WebsiteFashion.Models
         public string City { get; set; }
         public string Phone { get; set; }
         public string Password { get; set; }
+
+        //public bool isBlocked { get; set; }
     }
 }

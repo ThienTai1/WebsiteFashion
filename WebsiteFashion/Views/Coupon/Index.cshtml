@@ -1,0 +1,35 @@
+﻿@model IEnumerable<WebsiteFashion.Models.Coupon>
+
+<h1>Coupons</h1>
+
+<a asp-controller="Coupon" asp-action="Add">Add</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Code</th>
+            <th>Amount</th>
+            <th>Discount</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Is Active</th>
+            <!-- Add more columns if needed -->
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var coupon in Model)
+        {
+            <tr>
+                <td>@coupon.Id</td>
+                <td>@coupon.Code</td>
+                <td>@coupon.Amount</td>
+                <td>@coupon.Discount</td>
+                <td>@coupon.StartDate.ToShortDateString()</td>
+                <td>@coupon.EndDate.ToShortDateString()</td>
+                <td>@coupon.IsActive</td>
+                <!-- Add more columns if needed -->
+            </tr>
+        }
+    </tbody>
+</table>

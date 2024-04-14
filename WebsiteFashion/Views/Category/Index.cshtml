@@ -8,9 +8,13 @@
             Add
         </button>
     </a>
-    <form method="post" asp-action="DeleteAll">
-        <button type="submit" class="btn btn-danger">Delete All</button>
-    </form>
+    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+    {
+        <form method="post" asp-action="DeleteAll">
+            <button type="submit" class="btn btn-danger">Delete All</button>
+        </form>
+    }
+
 </div>
 
 <table class="table table-striped">
@@ -32,12 +36,11 @@
                 </td>
                 <td>
                     @Html.ActionLink("Update", "Update", new { id = item.Id }, new { @class = "btn btn-primary" })
-                </td>
-                <td>
                     @Html.ActionLink("Read more...", "Display", new { id = item.Id }, new { @class = "btn btn-primary" })
-                </td>
-                <td>
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-danger" })
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-danger" })
+                    }
                 </td>
             </tr>
 

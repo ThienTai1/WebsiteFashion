@@ -87,6 +87,9 @@ namespace WebsiteFashion.Areas.Identity.Pages.Account
             [Display(Name = "Email")]
             public string Email { get; set; }
 
+
+/*            [Required]
+            public string Address { get; set; }*/
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -106,9 +109,9 @@ namespace WebsiteFashion.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
-            public string? Role {  get; set; }
+            public string? Role { get; set; }
             [ValidateNever]
-            public IEnumerable<SelectListItem> RoleList {  get; set; }
+            public IEnumerable<SelectListItem> RoleList { get; set; }
 
 
         }
@@ -121,7 +124,6 @@ namespace WebsiteFashion.Areas.Identity.Pages.Account
                 _roleManager.CreateAsync(new IdentityRole(SD.Role_Customer)).GetAwaiter().GetResult();
                 _roleManager.CreateAsync(new IdentityRole(SD.Role_Employee)).GetAwaiter().GetResult();
                 _roleManager.CreateAsync(new IdentityRole(SD.Role_Admin)).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole(SD.Role_Company)).GetAwaiter().GetResult();
             }
             Input = new()
             {

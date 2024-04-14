@@ -12,15 +12,15 @@ using WebsiteFashion.Data;
 namespace WebsiteFashion.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240409032259_initialOrder")]
-    partial class initialOrder
+    [Migration("20240414054001_initialCoupon")]
+    partial class initialCoupon
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.3")
+                .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -251,6 +251,42 @@ namespace WebsiteFashion.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("WebsiteFashion.Models.Coupon", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<decimal>("Discount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId")
+                        .IsUnique();
+
+                    b.ToTable("Coupon");
+                });
+
             modelBuilder.Entity("WebsiteFashion.Models.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -333,6 +369,9 @@ namespace WebsiteFashion.Migrations
 
                     b.Property<string>("ImageUrls")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDetactive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -422,6 +461,17 @@ namespace WebsiteFashion.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("WebsiteFashion.Models.Coupon", b =>
+                {
+                    b.HasOne("WebsiteFashion.Models.Category", "Category")
+                        .WithOne("Coupon")
+                        .HasForeignKey("WebsiteFashion.Models.Coupon", "CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
             modelBuilder.Entity("WebsiteFashion.Models.Order", b =>
                 {
                     b.HasOne("WebsiteFashion.Models.ApplicationUser", "ApplicationUser")
@@ -476,6 +526,8 @@ namespace WebsiteFashion.Migrations
 
             modelBuilder.Entity("WebsiteFashion.Models.Category", b =>
                 {
+                    b.Navigation("Coupon");
+
                     b.Navigation("Products");
                 });
 

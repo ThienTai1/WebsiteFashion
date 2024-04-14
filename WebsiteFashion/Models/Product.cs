@@ -15,6 +15,7 @@ namespace WebsiteFashion.Models
         public Category? Category { get; set; }
         public string? ImageUrl { get; set; } // Đường dẫn đến hình ảnh đại diện
         public List<string>? ImageUrls { get; set; } // Danh sách các hình ảnh khác
+        public bool IsDetactive { get; set; }
 
 
     }

@@ -38,8 +38,25 @@
                 <td>@user.Email</td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@user.Id"><button type="submit" class="btn btn-primary">Edit</button></a>
+                    <form asp-action="LockAccount" method="post" style="display: inline;">
+                        <input type="hidden" name="id" value="@user.Id" />
+                        <input class="btn btn-danger" type="submit" value="Lock" />
+                    </form>
+                    <form asp-action="UnlockAccount" method="post" style="display: inline;">
+                        <input type="hidden" name="id" value="@user.Id" />
+                        <input class="btn btn-success" type="submit" value="Unlock" />
+                    </form>
+                </td>
+                <td>
+                    @if (user.LockoutEnd != DateTimeOffset.MaxValue)
+                    {
+                        <span class="text-success"> chưa block </span>
+                    }
+                    else
+                    {
+                        <span class="text-danger"> Đã block </span>
 
-                    <a asp-action="Delete" asp-route-id="@user.Id"><button type="submit" class="btn btn-danger">Delete</button></a>
+                    }
                 </td>
             </tr>
         }

@@ -36,11 +36,6 @@
                 <td>@user.FullName</td>
                 <td>@user.UserName</td>
                 <td>@user.Email</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@user.Id"><button type="submit" class="btn btn-primary">Edit</button></a>
-
-                    <a asp-action="Delete" asp-route-id="@user.Id"><button type="submit" class="btn btn-danger">Delete</button></a>
-                </td>
             </tr>
         }
     </tbody>

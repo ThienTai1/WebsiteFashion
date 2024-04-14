@@ -6,6 +6,8 @@ using WebsiteFashion.Models;
 using WebsiteFashion.Repositories;
 using WebsiteFashion.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Data.SqlClient;
 
 
 namespace WebsiteFashion.Controllers
@@ -18,6 +20,7 @@ namespace WebsiteFashion.Controllers
         private readonly IProductRepository _productRepository;
         private readonly ICategoryRepository _categoryRepository;
 
+
         public ProductController(IProductRepository productRepository, ICategoryRepository categoryRepository, ApplicationDbContext context)
         {
             _productRepository = productRepository;
@@ -25,26 +28,68 @@ namespace WebsiteFashion.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(string? searchString, string? categoryName)
+        public async Task<IActionResult> Index(string? searchString, string? categoryName, string sortOrder)
         {
-            var allProduct = from p in _context.Products select p;
-            var allCategory = from c in _context.Categories select c;
+            var allProducts = _context.Products.AsQueryable();
+            var allCategories = _context.Categories.AsQueryable();
 
             if (!string.IsNullOrEmpty(searchString))
             {
                 string lowercaseSearchString = searchString.ToLower();
-                allProduct = allProduct.Where(p => p.Name.ToLower().Contains(lowercaseSearchString));
+                allProducts = allProducts.Where(p => p.Name.ToLower().Contains(lowercaseSearchString));
             }
 
             if (!string.IsNullOrEmpty(categoryName))
             {
-                allProduct = allProduct.Where(p => p.Category.Name.ToLower() == categoryName.ToLower());
+                allProducts = allProducts.Where(p => p.Category.Name.ToLower() == categoryName.ToLower());
             }
 
-            var products = await allProduct.ToListAsync();
-            var categories = await allCategory.ToListAsync();
+            switch (sortOrder)
+            {
+                case "price_asc":
+                    allProducts = allProducts.OrderBy(p => p.Price);
+                    break;
+                case "price_desc":
+                    allProducts = allProducts.OrderByDescending(p => p.Price);
+                    break;
+                default:
+                    break;
+            }
+
+            // Kiểm tra nếu là role của Customer
+            if (User.IsInRole("Customer"))
+            {
+                // Lọc ra những sản phẩm không bị vô hiệu hoa
+                allProducts = allProducts.Where(p => !p.IsDetactive);
+            
+            }
+
+            var products = await allProducts.ToListAsync();
+            var categories = await allCategories.ToListAsync();
 
             return View(new Tuple<IEnumerable<Product>, IEnumerable<Category>>(products, categories));
+        }
+
+
+        [HttpPost]
+        public JsonResult GetSearchValue(string search)
+        {
+            var productResult = _context.Products.Where(x => x.Name.Contains(search))
+                                        .Select(x => new {
+                                            label = x.Name,
+                                            value = x.Name,
+                                        }).ToList();
+            return Json(productResult);
+        }
+        [HttpPost]
+        public JsonResult GetSearchCategoryValue(string search)
+        {
+            var productResult = _context.Categories.Where(x => x.Name.Contains(search))
+                                        .Select(x => new {
+                                            label = x.Name,
+                                            value = x.Name,
+                                        }).ToList();
+            return Json(productResult);
         }
 
 
@@ -107,11 +152,27 @@ namespace WebsiteFashion.Controllers
         // Hiển thị thông tin chi tiết sản phẩm
         public async Task<IActionResult> Display(int productId)
         {
-            var product = await GetProductFromDatabase(productId);
+            if (productId == null)
+            {
+                return NotFound();
+            }
+
+            var product = await _context.Products
+                .Include(p => p.Category)
+                .FirstOrDefaultAsync(m => m.Id == productId);
+
             if (product == null)
             {
                 return NotFound();
             }
+
+            // Check if the user is in the "Customer" role and the product is inactive
+            if (User.IsInRole("Customer") && product.IsDetactive==true)
+            {
+                // Redirect the customer to a page that explains the product is not available
+                return RedirectToAction("ProductNotAvailable","Home");
+            }
+
             return View(product);
         }
 
@@ -186,5 +247,39 @@ namespace WebsiteFashion.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin, Employee")]
+        public async Task<IActionResult> DeactivateProduct(int id)
+        {
+            var product = await _context.Products.FindAsync(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            product.IsDetactive = true;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin, Employee")]
+
+        public async Task<IActionResult> ReactivateProduct(int id)
+        {
+            var product = await _context.Products.FindAsync(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            product.IsDetactive = false;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }

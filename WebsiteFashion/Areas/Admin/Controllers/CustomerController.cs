@@ -29,8 +29,8 @@ namespace WebsiteFashion.Areas.Admin.Controllers
             var employee = await _userManager.GetUsersInRoleAsync("Customer");
             var employeeIds = employee.Select(u => u.Id);
             var allEmployee = from s in _context.Employee
-                               where employeeIds.Contains(s.Id)
-                               select s;
+                              where employeeIds.Contains(s.Id)
+                              select s;
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -93,6 +93,44 @@ namespace WebsiteFashion.Areas.Admin.Controllers
         {
             await _customerRepository.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> LockAccount(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            // Khóa tài khoản
+            var result = await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.MaxValue);
+            if (result.Succeeded)
+            {
+                TempData["Message"] = "Khoá Tài Khoản Thành Công";
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View("Error"); // Hoặc xử lý lỗi phù hợp
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UnlockAccount(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            // Mở khóa tài khoản
+            var result = await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.UtcNow);
+            if (result.Succeeded)
+            {
+                TempData["Message"] = "Mở Khoá Tài Khoản Thành Công";
+                return RedirectToAction(nameof(Index));
+            }
+            return View("Error"); // Hoặc xử lý lỗi phù hợp
         }
     }
 }

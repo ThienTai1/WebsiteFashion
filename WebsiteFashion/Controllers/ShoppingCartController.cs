@@ -11,7 +11,8 @@ using WebsiteFashion.Repositories;
 
 namespace WebsiteFashion.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = SD.Role_Customer)]
+
     public class ShoppingCartController : Controller
     {
         private readonly IProductRepository _productRepository;
