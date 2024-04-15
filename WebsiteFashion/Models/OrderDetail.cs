@@ -1,4 +1,4 @@
-﻿namespace WebsiteFashion.Models
+﻿ namespace WebsiteFashion.Models
 {
     public class OrderDetail
     {

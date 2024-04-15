@@ -278,8 +278,7 @@ namespace WebsiteFashion.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId")
-                        .IsUnique();
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Coupon");
                 });
@@ -293,14 +292,12 @@ namespace WebsiteFashion.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Notes")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ShippingAddress")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("TotalPrice")
@@ -461,8 +458,8 @@ namespace WebsiteFashion.Migrations
             modelBuilder.Entity("WebsiteFashion.Models.Coupon", b =>
                 {
                     b.HasOne("WebsiteFashion.Models.Category", "Category")
-                        .WithOne("Coupon")
-                        .HasForeignKey("WebsiteFashion.Models.Coupon", "CategoryId")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -523,8 +520,6 @@ namespace WebsiteFashion.Migrations
 
             modelBuilder.Entity("WebsiteFashion.Models.Category", b =>
                 {
-                    b.Navigation("Coupon");
-
                     b.Navigation("Products");
                 });
 

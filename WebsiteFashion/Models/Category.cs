@@ -8,7 +8,5 @@ namespace WebsiteFashion.Models
         [Required, StringLength(50)]
         public required string Name { get; set; }
         public List<Product>? Products { get; set; }
-
-        public Coupon? Coupon { get; set; }
-    }
+    }   
 }

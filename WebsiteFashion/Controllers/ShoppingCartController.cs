@@ -3,7 +3,9 @@ using ECommerceMVC.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol.Core.Types;
 using WebsiteFashion.Data;
 using WebsiteFashion.Extensions;
 using WebsiteFashion.Models;
@@ -16,15 +18,24 @@ namespace WebsiteFashion.Controllers
     public class ShoppingCartController : Controller
     {
         private readonly IProductRepository _productRepository;
+        private readonly ICategoryRepository _categoryRepository;
+        private readonly ICouponRepository _couponRepository;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IVnPayService _vnPayservice;
-        public ShoppingCartController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IProductRepository productRepository, IVnPayService vnPayservice)
+        public ShoppingCartController(ApplicationDbContext context, 
+            UserManager<ApplicationUser> userManager, 
+            IVnPayService vnPayservice, 
+            IProductRepository productRepository, 
+            ICategoryRepository categoryRepository, 
+            ICouponRepository couponRepository)
         {
-            _productRepository = productRepository;
             _context = context;
             _userManager = userManager;
             _vnPayservice = vnPayservice;
+            _productRepository = productRepository;
+            _categoryRepository = categoryRepository;
+            _couponRepository = couponRepository;
         }
 
         public async Task<IActionResult> AddToCart(int productId, int quantity)
@@ -36,17 +47,14 @@ namespace WebsiteFashion.Controllers
             {
                 ProductId = productId,
                 Name = product.Name,
+                CategoryId = product.CategoryId,
                 Price = product.Price,
                 ImageUrl = product.ImageUrl,
                 Quantity = quantity
             };
-            var cart =
-            HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart") ?? new
-            ShoppingCart();
+            var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart") ?? new ShoppingCart();
             cart.AddItem(cartItem);
             HttpContext.Session.SetObjectAsJson("Cart", cart);
-
-
 
             // kiểm tra Url trước kia
             string previousRoute = Request.Headers["Referer"].ToString();
@@ -61,13 +69,65 @@ namespace WebsiteFashion.Controllers
                 // Ko thấy Url trước kia sẽ quay về Home.
                 return RedirectToAction("Index", "Home");
             }
-
         }
-        public IActionResult Index()
+
+        [HttpPost]
+        public IActionResult ChooseCoupon(ChooseCouponViewModel model, string action)
         {
-            var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart") ?? new
-            ShoppingCart();
-            return View(cart);
+            if (action == "AddSelectedCoupon")
+            {
+                // Update the shopping cart with the selected coupons
+                foreach (var coupon in model.SelectedCoupons.Values)
+                {
+                    // Add the coupon to the shopping cart
+                }
+                return RedirectToAction("Index", "ShoppingCart");
+            }
+            // Other logic for handling the form submission
+            return View(model);
+        }
+
+        public async Task<IActionResult> AddCouponToCart(int Id)
+        {
+            var coupon = await _context.Coupon.FindAsync(Id);
+            if (coupon == null)
+            {
+                return NotFound();
+            }
+            return View(coupon);
+        }
+
+        /*        public async Task<IActionResult> GetCategoryFromShoppingCart()
+                {
+                    var coupons = await _couponRepository.GetAllAsync();
+                    var categories = await _categoryRepository.GetAllAsync();
+
+                    // Retrieve categories of products from the shopping cart (Assuming you have a ShoppingCartService)
+                    var shoppingCartCategories = await _shoppingCartService.GetCategoriesAsync();
+
+                    // Pass the coupons, categories, and shopping cart categories to the view
+                    return View(new ValueTuple<IEnumerable<Coupon>, IEnumerable<Category>, IEnumerable<Category>>(coupons, categories, shoppingCartCategories));
+                }*/
+
+
+        public async Task<IActionResult> Index(int[] selectedCouponIds)
+        {
+            var allProducts = _context.Products.AsQueryable();
+            var allCoupons = _context.Coupon.AsQueryable();
+            var allCategories = _context.Categories.AsQueryable();
+
+            // Retrieve the selected coupons
+            var selectedCoupons = await allCoupons.Where(c => selectedCouponIds.Contains(c.Id)).ToListAsync();
+
+            // Fetch all data
+            var products = await allProducts.ToListAsync();
+            var categories = await allCategories.ToListAsync();
+            var coupons = await allCoupons.ToListAsync();
+
+            var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart") ?? new ShoppingCart();
+
+            //return View((cart, selectedCoupons, products, categories));
+            return View(new Tuple<ShoppingCart, IEnumerable<Coupon>, IEnumerable<Product>, IEnumerable<Category>>(cart, selectedCoupons, products, categories));
         }
 
         private async Task<Product> GetProductFromDatabase(int productId)
@@ -173,12 +233,25 @@ namespace WebsiteFashion.Controllers
             return View(product);
         }
 
-        public IActionResult Checkout()
+        public IActionResult Checkout(Order order, decimal discountTotal)
         {
-            return View(new Order());
+            if (string.IsNullOrWhiteSpace(order.Notes))
+            {
+                order.Notes = "No notes provided";
+            }
+            if (ModelState.IsValid)
+            {
+                order.TotalPrice = discountTotal;
+
+                _context.Orders.Update(order);
+                _context.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+            return View((new Order(), discountTotal));
         }
         [HttpPost]
-        public async Task<IActionResult> Checkout(Order order, string payment)
+        public async Task<IActionResult> Checkout(Order order, string payment, decimal discountTotal)
         {
             var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart");
             if (cart == null || !cart.Items.Any())
@@ -186,10 +259,11 @@ namespace WebsiteFashion.Controllers
                 // Xử lý giỏ hàng trống...
                 return RedirectToAction("Index");
             }
+
             var user = await _userManager.GetUserAsync(User);
             order.UserId = user.Id;
             order.OrderDate = DateTime.UtcNow;
-            order.TotalPrice = cart.Items.Sum(i => i.Price * i.Quantity);
+            order.TotalPrice = discountTotal;
             order.OrderDetails = cart.Items.Select(i => new OrderDetail
             {
                 ProductId = i.ProductId,
@@ -202,7 +276,7 @@ namespace WebsiteFashion.Controllers
             {
                 var vnPayModel = new VnPaymentRequest
                 {
-                    Amount = ((double)cart.Items.Sum(i => i.Price * i.Quantity)),
+                    Amount = (double)(order.TotalPrice),
                     CreatedDate = DateTime.Now,
 
                     Description = user.FullName + user.PhoneNumber,

@@ -12,19 +12,20 @@ using Microsoft.Data.SqlClient;
 
 namespace WebsiteFashion.Controllers
 {
-    
+
 
     public class ProductController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly IProductRepository _productRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly ICouponRepository _couponRepository;
 
-
-        public ProductController(IProductRepository productRepository, ICategoryRepository categoryRepository, ApplicationDbContext context)
+        public ProductController(IProductRepository productRepository, ICategoryRepository categoryRepository, ApplicationDbContext context, ICouponRepository couponRepository)
         {
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
+            _couponRepository = couponRepository;
             _context = context;
         }
 
@@ -32,6 +33,7 @@ namespace WebsiteFashion.Controllers
         {
             var allProducts = _context.Products.AsQueryable();
             var allCategories = _context.Categories.AsQueryable();
+            var allCoupons = _context.Coupon.AsQueryable();
 
             if (!string.IsNullOrEmpty(searchString))
             {
@@ -44,6 +46,7 @@ namespace WebsiteFashion.Controllers
                 allProducts = allProducts.Where(p => p.Category.Name.ToLower() == categoryName.ToLower());
             }
 
+            // Search theo tăng giảm giá
             switch (sortOrder)
             {
                 case "price_asc":
@@ -61,13 +64,21 @@ namespace WebsiteFashion.Controllers
             {
                 // Lọc ra những sản phẩm không bị vô hiệu hoa
                 allProducts = allProducts.Where(p => !p.IsDetactive);
-            
             }
 
+            // Fetch all data
             var products = await allProducts.ToListAsync();
             var categories = await allCategories.ToListAsync();
+            var coupons = await allCoupons.ToListAsync();
 
-            return View(new Tuple<IEnumerable<Product>, IEnumerable<Category>>(products, categories));
+            var viewModel = new ProductCategoryViewModel
+            {
+                Products = products,
+                Categories = categories,
+                Coupons = coupons
+            };
+
+            return View(viewModel);
         }
 
 
@@ -75,7 +86,8 @@ namespace WebsiteFashion.Controllers
         public JsonResult GetSearchValue(string search)
         {
             var productResult = _context.Products.Where(x => x.Name.Contains(search))
-                                        .Select(x => new {
+                                        .Select(x => new
+                                        {
                                             label = x.Name,
                                             value = x.Name,
                                         }).ToList();
@@ -85,7 +97,8 @@ namespace WebsiteFashion.Controllers
         public JsonResult GetSearchCategoryValue(string search)
         {
             var productResult = _context.Categories.Where(x => x.Name.Contains(search))
-                                        .Select(x => new {
+                                        .Select(x => new
+                                        {
                                             label = x.Name,
                                             value = x.Name,
                                         }).ToList();
@@ -100,7 +113,7 @@ namespace WebsiteFashion.Controllers
             ViewBag.Categories = new SelectList(categories, "Id", "Name");
             return View();
         }
-        
+
         // Add product
         [Authorize(Roles = "Admin, Employee")]
         [HttpPost]
@@ -167,10 +180,10 @@ namespace WebsiteFashion.Controllers
             }
 
             // Check if the user is in the "Customer" role and the product is inactive
-            if (User.IsInRole("Customer") && product.IsDetactive==true)
+            if (User.IsInRole("Customer") && product.IsDetactive == true)
             {
                 // Redirect the customer to a page that explains the product is not available
-                return RedirectToAction("ProductNotAvailable","Home");
+                return RedirectToAction("ProductNotAvailable", "Home");
             }
 
             return View(product);

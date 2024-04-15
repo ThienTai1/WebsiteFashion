@@ -9,8 +9,8 @@ namespace WebsiteFashion.Models
         public string UserId { get; set; }
         public DateTime OrderDate { get; set; }
         public decimal TotalPrice { get; set; }
-        public string ShippingAddress { get; set; }
-        public string Notes { get; set; }
+        public string? ShippingAddress { get; set; }
+        public string? Notes { get; set; }
         [ForeignKey("UserId")]
         [ValidateNever]
         public ApplicationUser ApplicationUser { get; set; }
