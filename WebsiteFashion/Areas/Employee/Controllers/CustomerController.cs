@@ -79,7 +79,7 @@ namespace WebsiteFashion.Controllers
         // GET: Displays the confirmation page for deleting an Customer
         public async Task<IActionResult> Delete(string id)
         {
-            var Customer = await _customerRepository.GetByIdAsync(id);
+            var customer = await _customerRepository.GetByIdAsync(id);
             if (customer == null)
             {
                 return NotFound();
