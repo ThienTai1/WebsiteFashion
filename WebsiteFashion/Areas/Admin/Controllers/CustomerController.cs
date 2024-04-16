@@ -14,11 +14,11 @@ namespace WebsiteFashion.Areas.Admin.Controllers
     public class CustomerController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly IEmployeeRepository _customerRepository;
+        private readonly ICustomerRepository _customerRepository;
         private readonly UserManager<ApplicationUser> _userManager;
-        public CustomerController(IEmployeeRepository employeeRepository, ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public CustomerController(ICustomerRepository customerRepository, ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
-            _customerRepository = employeeRepository;
+            _customerRepository = customerRepository;
             _context = context;
             _userManager = userManager;
         }
@@ -26,68 +26,68 @@ namespace WebsiteFashion.Areas.Admin.Controllers
         public async Task<IActionResult> Index(string searchString)
         {
 
-            var employee = await _userManager.GetUsersInRoleAsync("Customer");
-            var employeeIds = employee.Select(u => u.Id);
-            var allEmployee = from s in _context.Employee
-                              where employeeIds.Contains(s.Id)
+            var customer = await _userManager.GetUsersInRoleAsync("Customer");
+            var customerIds = customer.Select(u => u.Id);
+            var allCustomer = from s in _context.Customer
+                              where customerIds.Contains(s.Id)
                               select s;
 
             if (!String.IsNullOrEmpty(searchString))
             {
                 string lowercaseSearchString = searchString.ToLower();
-                allEmployee = allEmployee.Where(s => s.FullName.ToLower().Contains(lowercaseSearchString));
+                allCustomer = allCustomer.Where(s => s.FullName.ToLower().Contains(lowercaseSearchString));
             }
 
-            return View(await allEmployee.ToListAsync());
+            return View(await allCustomer.ToListAsync());
         }
 
-        // GET: Displays the form to update an employee
+        // GET: Displays the form to update an customer
         public async Task<IActionResult> Edit(string id)
         {
-            var employee = await _customerRepository.GetByIdAsync(id);
-            if (employee == null)
+            var customer = await _customerRepository.GetByIdAsync(id);
+            if (customer == null)
             {
                 return NotFound();
             }
-            return View(employee);
+            return View(customer);
         }
 
-        // POST: Updates an employee
+        // POST: Updates an customer
         [HttpPost]
-        public async Task<IActionResult> Edit(string id, ApplicationUser employee)
+        public async Task<IActionResult> Edit(string id, ApplicationUser customer)
         {
-            if (id != employee.Id)
+            if (id != customer.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                var existingEmployee = await _customerRepository.GetByIdAsync(id); // Giả định có phương thức GetByIdAsync
+                var existingCustomer = await _customerRepository.GetByIdAsync(id); // Giả định có phương thức GetByIdAsync
 
-                existingEmployee.FullName = employee.FullName;
-                existingEmployee.UserName = employee.UserName;
-                existingEmployee.Email = employee.Email;
+                existingCustomer.FullName = customer.FullName;
+                existingCustomer.UserName = customer.UserName;
+                existingCustomer.Email = customer.Email;
 
-                await _customerRepository.UpdateAsync(existingEmployee);
+                await _customerRepository.UpdateAsync(existingCustomer);
 
                 return RedirectToAction(nameof(Index));
             }
-            return View(employee);
+            return View(customer);
         }
 
-        // GET: Displays the confirmation page for deleting an employee
+        // GET: Displays the confirmation page for deleting an customer
         public async Task<IActionResult> Delete(string id)
         {
-            var employee = await _customerRepository.GetByIdAsync(id);
-            if (employee == null)
+            var customer = await _customerRepository.GetByIdAsync(id);
+            if (customer == null)
             {
                 return NotFound();
             }
-            return View(employee);
+            return View(customer);
         }
 
-        // POST: Deletes an employee
+        // POST: Deletes an customer
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
