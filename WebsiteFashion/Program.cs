@@ -48,6 +48,7 @@ builder.Services.AddRazorPages()
 builder.Services.AddScoped<IProductRepository, EFProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, EFCategoryRepository>();
 builder.Services.AddScoped<IEmployeeRepository, EFEmployeeRepository>();
+services.AddScoped<ICustomerRepository, EFCustomerRepository>();
 builder.Services.AddScoped<ICouponRepository, ECouponRepository>();
 
 builder.Services.AddDistributedMemoryCache();
