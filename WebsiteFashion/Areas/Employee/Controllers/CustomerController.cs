@@ -9,8 +9,8 @@ using WebsiteFashion.Repositories;
 
 namespace WebsiteFashion.Controllers
 {
-    [Area("Customer")]
-    [Authorize(Roles = SD.Role_Customer)] // Adjust the role as necessary
+    [Area("Employee")]
+    [Authorize(Roles = SD.Role_Employee)] // Adjust the role as necessary
     public class CustomerController : Controller
     {
         private readonly ApplicationDbContext _context;
